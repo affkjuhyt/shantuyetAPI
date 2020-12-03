@@ -1,0 +1,10 @@
+/environments.env
+/.venv/
+/venv/
+/main_debug.log
+/dump.rdb
+__pycache__/
+/__pycache__/
+*.py[cod]
+*$py.class
+.idea/
