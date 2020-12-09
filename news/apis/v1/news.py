@@ -1,6 +1,5 @@
 import logging
 
-from django.contrib.auth.models import User
 from rest_framework import generics
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import AllowAny
@@ -19,5 +18,4 @@ class NewsView(ReadOnlyModelViewSet):
     parser_classes = [JSONParser, MultiPartParser, FormParser]
 
     def get_queryset(self):
-        user = User.objects.all()
         return News.objects.filter(is_enable=True)
