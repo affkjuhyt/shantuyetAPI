@@ -95,6 +95,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+AUTH_KEYS_DIR = '%s/root/settings/auth_key' % BASE_DIR
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
