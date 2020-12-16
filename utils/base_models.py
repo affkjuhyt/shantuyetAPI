@@ -20,3 +20,8 @@ class BaseUserModel(BaseTimeStampModel):
 
     class Meta:
         abstract = True
+
+
+class BaseModel(BaseTimeStampModel):
+    class Meta:
+        abstract = True

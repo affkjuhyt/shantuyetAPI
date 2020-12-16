@@ -4,6 +4,9 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 
 from news.urls import news_public_urlpatterns
+from teas.urls import teas_public_urlpatterns
+from userprofile.urls import userprofile_public_urlpatterns
+from request.urls import request_public_urlpatterns
 from signin import views
 
 
@@ -16,11 +19,15 @@ schema_view = get_schema_view(
     public=True,
 )
 
+external_public_urlpatterns = news_public_urlpatterns + teas_public_urlpatterns + userprofile_public_urlpatterns + \
+                              request_public_urlpatterns
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
-    path('v1/public/', include(news_public_urlpatterns)),
+    path('v1/public/', include(external_public_urlpatterns)),
+    path('v1/', include(external_public_urlpatterns)),
     path('signingg/', views.GoogleView.as_view(), name='signin-gg'),
     path('signinfb/', views.FacebookView.as_view(), name='signin-fb'),
 ]
