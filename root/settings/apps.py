@@ -14,4 +14,7 @@ INSTALLED_APPS = [
     'django_filters',
 
     'news',
+    'teas',
+    'userprofile',
+    'request',
 ]
