@@ -2,17 +2,19 @@ import logging
 
 from django.db import models
 
-from utils.base_models import BaseTimeStampModel
+from utils.base_models import BaseUserModel
 
 logger = logging.getLogger(__name__.split('.')[0])
 
 
-class UserProfile(BaseTimeStampModel):
+class UserProfile(BaseUserModel):
     OWNER = 'owner'
     SECONDARY_OWNER = 'secondary_owner'
     PROCESSING = 'processing'
     APPROVED = 'approved'
     REJECT = 'reject'
+    MALE = 'male'
+    FEMALE = 'female'
 
     USERTYPE = (
         (OWNER, 'Owner'),
@@ -25,10 +27,15 @@ class UserProfile(BaseTimeStampModel):
         (REJECT, 'Reject')
     )
 
+    GENDER = (
+        (MALE, 'Male'),
+        (FEMALE, 'Female')
+    )
+
     fullname = models.CharField(max_length=30, null=True, blank=True)
     phone_number = models.CharField(max_length=20, null=True, blank=True)
     email = models.CharField(max_length=30, null=False, blank=False)
-    gender = models.BooleanField(default=True)
+    gender = models.CharField(max_length=20,choices=GENDER, default=MALE)
     address = models.CharField(max_length=150, null=True, blank=True)
     dob = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=STATUS, default=PROCESSING)

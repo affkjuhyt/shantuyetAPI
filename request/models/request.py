@@ -23,7 +23,7 @@ class Request(BaseModel):
     tea = models.ForeignKey(Teas, null=True, on_delete=models.CASCADE)
     owner = models.ForeignKey(UserProfile, null=True, on_delete=models.CASCADE, related_name="owner")
     secondary_owner = models.ForeignKey(UserProfile, null=True, on_delete=models.CASCADE,
-                                           related_name="secondary_owner")
+                                        related_name="secondary_owner")
     name = models.CharField(max_length=1000, null=True)
     date = models.DateTimeField(auto_now_add=True)
     request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default=PROCESSING)
