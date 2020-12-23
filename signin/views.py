@@ -8,6 +8,8 @@ from rest_framework.utils import json
 from rest_framework.views import APIView
 from rest_framework_jwt.settings import api_settings
 
+from userprofile.models import UserProfile
+
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
@@ -62,7 +64,16 @@ class FacebookView(APIView):
             user.username = user_info_response["id"]
             user.password = make_password(BaseUserManager().make_random_password())
             user.email = user_info_response["id"]
+            # profile = user.userprofile
+            # profile.user_type = 'secondary_owner'
+            # profile.save()
+            # user.user_type = "secondary_owner"
             user.save()
+
+            UserProfile.objects.create(
+                user=user,
+                user_type='secondary_owner',
+            )
 
         payload = jwt_payload_handler(user)
         token = jwt_encode_handler(payload)
