@@ -43,7 +43,7 @@ class UserProfile(BaseUserModel):
     id_card = models.CharField(max_length=12, null=True, blank=True)
     permanent_residence = models.CharField(max_length=2000, null=True, blank=True)
     issued_by = models.CharField(max_length=1000, null=True, blank=True)
-    issued_date = models.CharField(max_length=1000, null=True, blank=True)
+    issued_date = models.DateField(default=None)
     province = models.CharField(max_length=500, null=True, blank=True)
     district = models.CharField(max_length=500, null=True, blank=True)
     sub_district = models.CharField(max_length=500, null=True, blank=True)
