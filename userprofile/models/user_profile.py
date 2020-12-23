@@ -37,13 +37,17 @@ class UserProfile(BaseUserModel):
     email = models.CharField(max_length=30, null=False, blank=False)
     gender = models.CharField(max_length=20,choices=GENDER, default=MALE)
     address = models.CharField(max_length=150, null=True, blank=True)
-    dob = models.DateTimeField(auto_now_add=True)
+    dob = models.DateField(default=None)
     status = models.CharField(max_length=20, choices=STATUS, default=PROCESSING)
     user_type = models.CharField(max_length=20, choices=USERTYPE, default=SECONDARY_OWNER)
     id_card = models.CharField(max_length=12, null=True, blank=True)
     permanent_residence = models.CharField(max_length=2000, null=True, blank=True)
     issued_by = models.CharField(max_length=1000, null=True, blank=True)
     issued_date = models.CharField(max_length=1000, null=True, blank=True)
+    province = models.CharField(max_length=500, null=True, blank=True)
+    district = models.CharField(max_length=500, null=True, blank=True)
+    sub_district = models.CharField(max_length=500, null=True, blank=True)
+    street = models.CharField(max_length=500, null=True, blank=True)
 
     def __str__(self):
         return "%s" % self.fullname
