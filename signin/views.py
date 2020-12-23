@@ -67,6 +67,7 @@ class FacebookView(APIView):
             user.save()
             profile = UserProfile(user=user)
             profile.user_type='secondary_owner'
+            profile.dob='2020-12-23'
             profile.save()
 
         payload = jwt_payload_handler(user)
