@@ -64,16 +64,10 @@ class FacebookView(APIView):
             user.username = user_info_response["id"]
             user.password = make_password(BaseUserManager().make_random_password())
             user.email = user_info_response["id"]
-            # profile = user.userprofile
-            # profile.user_type = 'secondary_owner'
-            # profile.save()
-            # user.user_type = "secondary_owner"
             user.save()
-
-            UserProfile.objects.create(
-                user=user,
-                user_type='secondary_owner',
-            )
+            profile = UserProfile(user=user)
+            profile.user_type='secondary_owner'
+            profile.save()
 
         payload = jwt_payload_handler(user)
         token = jwt_encode_handler(payload)
