@@ -9,7 +9,7 @@ class UserProfileAdmin(admin.ModelAdmin):
                     'id_card', 'permanent_residence', 'issued_by', 'issued_date', 'province', 'district',
                     'sub_district', 'street']
     search_fields = ['fullname', 'phone_number']
-    raw_id_fields = []
+    raw_id_fields = ['user']
 
 
 admin.site.register(UserProfile , UserProfileAdmin)
