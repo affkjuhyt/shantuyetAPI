@@ -3,9 +3,9 @@ from django.urls import path, include
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 
-from news.urls import news_public_urlpatterns
+from news.urls import news_public_urlpatterns, news_urlpatterns
 from teas.urls import teas_public_urlpatterns
-from userprofile.urls import userprofile_public_urlpatterns
+from userprofile.urls import userprofile_public_urlpatterns, userprofile_urlpatterns
 from request.urls import request_public_urlpatterns
 from signin import views
 
@@ -21,7 +21,7 @@ schema_view = get_schema_view(
 
 external_public_urlpatterns = news_public_urlpatterns + teas_public_urlpatterns + userprofile_public_urlpatterns + \
                               request_public_urlpatterns
-external_urlpatterns = userprofile_public_urlpatterns
+external_urlpatterns = news_urlpatterns + userprofile_urlpatterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
