@@ -5,21 +5,9 @@ from userprofile.apis.v1 import UserPublicView, OwnerView, SecondaryOwnerView
 public_router = ExtendedSimpleRouter()
 
 public_router.register(
-    r'non-users',
+    r'user-profile',
     UserPublicView,
-    basename='v1-non-user'
-)
-
-public_router.register(
-    r'owners',
-    OwnerView,
-    basename='v1-owner'
-)
-
-public_router.register(
-    r'secondary-owners',
-    SecondaryOwnerView,
-    basename='v1-secondary-owner'
+    basename='v1-user-profile'
 )
 
 userprofile_public_urlpatterns = public_router.urls
@@ -27,9 +15,9 @@ userprofile_public_urlpatterns = public_router.urls
 admin_router = ExtendedSimpleRouter()
 
 admin_router.register(
-    r'non-users',
+    r'user-profile',
     UserPublicView,
-    basename='v1-non-user'
+    basename='v1-user-profile'
 )
 
 admin_router.register(

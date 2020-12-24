@@ -1,5 +1,9 @@
-from django.db import models
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+import uuid
+
 from django.conf import settings
+from django.db import models
 
 
 class BaseTimeStampModel(models.Model):
@@ -15,7 +19,17 @@ class BaseUserModel(BaseTimeStampModel):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="user"
+        related_name="%(class)s"
+    )
+
+    class Meta:
+        abstract = True
+
+
+class BaseForeignKeyUserModel(BaseTimeStampModel):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
     )
 
     class Meta:
@@ -23,5 +37,12 @@ class BaseUserModel(BaseTimeStampModel):
 
 
 class BaseModel(BaseTimeStampModel):
+    class Meta:
+        abstract = True
+
+
+class BaseUUIDModel(BaseTimeStampModel):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
     class Meta:
         abstract = True
