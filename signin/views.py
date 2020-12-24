@@ -36,6 +36,9 @@ class GoogleView(APIView):
             user.password = make_password(BaseUserManager().make_random_password())
             user.email = data['email']
             user.save()
+            profile = UserProfile(user=user)
+            profile.user_type = 'secondary_owner'
+            profile.save()
 
         payload = jwt_payload_handler(user)
         token = jwt_encode_handler(payload)
@@ -67,7 +70,6 @@ class FacebookView(APIView):
             user.save()
             profile = UserProfile(user=user)
             profile.user_type='secondary_owner'
-            profile.dob='2020-12-23'
             profile.save()
 
         payload = jwt_payload_handler(user)
