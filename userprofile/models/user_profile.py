@@ -37,7 +37,7 @@ class UserProfile(BaseUserModel):
     email = models.CharField(max_length=30, null=False, blank=False)
     gender = models.CharField(max_length=20,choices=GENDER, default=MALE)
     address = models.CharField(max_length=150, null=True, blank=True)
-    dob = models.DateField(default=None)
+    dob = models.DateField(default=None, null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS, default=PROCESSING)
     user_type = models.CharField(max_length=20, choices=USERTYPE, default=SECONDARY_OWNER)
     id_card = models.CharField(max_length=12, null=True, blank=True)
