@@ -6,6 +6,7 @@ from rest_framework.viewsets import ReadOnlyModelViewSet, ViewSetMixin
 from rest_framework.permissions import AllowAny
 
 from userprofile.models import UserProfile
+from root.authentications import BaseUserJWTAuthentication
 from userprofile.permissions import OwnerOnly
 from userprofile.permissions import SecondaryOwnerOnly
 from userprofile.serializers import UserProfileSerializers
@@ -15,6 +16,7 @@ logger = logging.getLogger(__name__.split('.')[0])
 
 class UserPublicView(ReadOnlyModelViewSet):
     serializer_class = UserProfileSerializers
+    authentication_classes = [BaseUserJWTAuthentication]
     permission_classes = [AllowAny]
     parser_classes = [JSONParser, MultiPartParser, FormParser]
 
@@ -24,6 +26,7 @@ class UserPublicView(ReadOnlyModelViewSet):
 
 class OwnerView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListCreateAPIView):
     serializer_class = UserProfileSerializers
+    authentication_classes = [BaseUserJWTAuthentication]
     permission_classes = [AllowAny]
     parser_classes = [JSONParser, MultiPartParser, FormParser]
 
@@ -33,6 +36,7 @@ class OwnerView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListCreat
 
 class SecondaryOwnerView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListCreateAPIView):
     serializer_class = UserProfileSerializers
+    authentication_classes = [BaseUserJWTAuthentication]
     permission_classes = [AllowAny]
     parser_classes = [JSONParser, MultiPartParser, FormParser]
 
