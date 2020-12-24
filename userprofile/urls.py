@@ -23,3 +23,25 @@ public_router.register(
 )
 
 userprofile_public_urlpatterns = public_router.urls
+
+admin_router = ExtendedSimpleRouter()
+
+admin_router.register(
+    r'non-users',
+    UserPublicView,
+    basename='v1-non-user'
+)
+
+admin_router.register(
+    r'owners',
+    OwnerView,
+    basename='v1-owner'
+)
+
+admin_router.register(
+    r'secondary-owners',
+    SecondaryOwnerView,
+    basename='v1-secondary-owner'
+)
+
+userprofile_urlpatterns = admin_router.urls
