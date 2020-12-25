@@ -9,7 +9,7 @@ class OwnerOnly(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.user.is_authenticated:
             user_profile = UserProfile.objects.filter(user=request.user).first()
-            if user_profile and user_profile.user_type == 'Owner':
+            if user_profile and user_profile.user_type == 'owner':
                 return True
         return False
 
@@ -20,6 +20,6 @@ class SecondaryOwnerOnly(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.user.is_authenticated:
             user_profile = UserProfile.objects.filter(user=request.user).first()
-            if user_profile and user_profile.user_type == 'SecondaryOwner':
+            if user_profile and user_profile.user_type == 'secondary_owner':
                 return True
         return False

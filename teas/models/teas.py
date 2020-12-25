@@ -2,14 +2,14 @@ import logging
 
 from django.db import models
 
-from userprofile.models import UserProfile
+from userprofile.models import UserProfile, Owner
 from utils.base_models import BaseModel
 
 logger = logging.getLogger(__name__.split('.')[0])
 
 
 class Teas(BaseModel):
-    owner = models.ForeignKey(UserProfile, null=True,on_delete=models.CASCADE)
+    owner = models.ForeignKey(Owner, null=True,on_delete=models.CASCADE)
     name = models.CharField(max_length=1000, null=True)
     age = models.IntegerField(default=0)
     diameter = models.FloatField(max_length=2000, null=True)

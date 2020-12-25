@@ -1,1 +1,2 @@
-from .user_profile import UserPublicView, OwnerView, SecondaryOwnerView
+from .owner import OwnerPublicView, OwnerAdminView
+from .secondary_owner import SecondaryOwnerPublicView, SecondaryOwnerAdminView
