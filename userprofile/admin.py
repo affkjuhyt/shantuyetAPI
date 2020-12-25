@@ -11,7 +11,7 @@ class UserProfileAdmin(admin.ModelAdmin):
     raw_id_fields = ['user']
 
 
-admin.site.register(UserProfile , UserProfileAdmin)
+admin.site.register(UserProfile, UserProfileAdmin)
 
 
 class OwnerAdmin(admin.ModelAdmin):

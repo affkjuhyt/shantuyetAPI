@@ -8,7 +8,7 @@ from rest_framework.utils import json
 from rest_framework.views import APIView
 from rest_framework_jwt.settings import api_settings
 
-from userprofile.models import UserProfile
+from userprofile.models import UserProfile, SecondaryOwner
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
@@ -36,9 +36,9 @@ class GoogleView(APIView):
             user.password = make_password(BaseUserManager().make_random_password())
             user.email = data['email']
             user.save()
-            profile = UserProfile(user=user)
-            profile.user_type = 'secondary_owner'
-            profile.save()
+            secondary_owner = SecondaryOwner(user=user)
+            secondary_owner.user_type = 'secondary_owner'
+            secondary_owner.save()
 
         payload = jwt_payload_handler(user)
         token = jwt_encode_handler(payload)
@@ -69,9 +69,9 @@ class FacebookView(APIView):
             user.password = make_password(BaseUserManager().make_random_password())
             user.email = user_info_response["id"]
             user.save()
-            profile = UserProfile(user=user)
-            profile.user_type='secondary_owner'
-            profile.save()
+            secondary_owner = SecondaryOwner(user=user)
+            secondary_owner.user_type = 'secondary_owner'
+            secondary_owner.save()
 
         payload = jwt_payload_handler(user)
         token = jwt_encode_handler(payload)

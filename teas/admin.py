@@ -5,7 +5,7 @@ from teas.models import Teas
 
 
 class TeasAdmin(admin.ModelAdmin):
-    list_display = ('id', 'owner', 'name', 'age', 'diameter', 'lat', 'lon',
+    list_display = ('id', 'owner', 'name', 'age', 'diameter', 'height',
                     'image1', 'image2', 'image3', 'image4')
     search_fields = ['name']
     raw_id_fields = ['owner']
