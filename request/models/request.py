@@ -4,7 +4,7 @@ from django.db import models
 
 from utils.base_models import BaseModel
 from teas.models import Teas
-from userprofile.models import UserProfile, Owner, SecondaryOwner
+from userprofile.models import Owner, SecondaryOwner
 
 logger = logging.getLogger(__name__.split('.')[0])
 
