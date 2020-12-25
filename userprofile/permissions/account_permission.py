@@ -1,6 +1,6 @@
 from rest_framework import permissions
 
-from userprofile.models import UserProfile
+from userprofile.models import Owner, SecondaryOwner
 
 
 class OwnerOnly(permissions.BasePermission):
@@ -8,8 +8,8 @@ class OwnerOnly(permissions.BasePermission):
 
     def has_permission(self, request, view):
         if request.user.is_authenticated:
-            user_profile = UserProfile.objects.filter(user=request.user).first()
-            if user_profile and user_profile.user_type == 'owner':
+            user_profile = Owner.objects.filter(user=request.user).first()
+            if user_profile:
                 return True
         return False
 
@@ -19,7 +19,7 @@ class SecondaryOwnerOnly(permissions.BasePermission):
 
     def has_permission(self, request, view):
         if request.user.is_authenticated:
-            user_profile = UserProfile.objects.filter(user=request.user).first()
-            if user_profile and user_profile.user_type == 'secondary_owner':
+            user_profile = SecondaryOwner.objects.filter(user=request.user).first()
+            if user_profile:
                 return True
         return False
