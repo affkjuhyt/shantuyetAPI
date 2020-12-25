@@ -1,1 +1,1 @@
-from .teas import TeasSerializers
+from .teas import TeasSerializer

@@ -1,1 +1,1 @@
-from .request import RequestSerializers
+from .request import RequestSerializer

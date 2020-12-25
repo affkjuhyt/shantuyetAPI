@@ -7,7 +7,7 @@ from teas.models import Teas
 logger = logging.getLogger(__name__)
 
 
-class TeasSerializers(serializers.ModelSerializer):
+class TeasSerializer(serializers.ModelSerializer):
     class Meta:
         model = Teas
         fields = ['id', 'owner', 'name', 'age', 'diameter', 'lat', 'lon',

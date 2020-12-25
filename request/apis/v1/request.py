@@ -7,13 +7,13 @@ from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ReadOnlyModelViewSet, ViewSetMixin
 
 from request.models import Request
-from request.serializers import RequestSerializers
+from request.serializers import RequestSerializer
 
 logger = logging.getLogger(__name__.split('.')[0])
 
 
 class RequestView(ReadOnlyModelViewSet):
-    serializer_class = RequestSerializers
+    serializer_class = RequestSerializer
     permission_classes = [AllowAny]
     parser_classes = [JSONParser, MultiPartParser, FormParser]
 
@@ -22,7 +22,7 @@ class RequestView(ReadOnlyModelViewSet):
 
 
 class RequestAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListCreateAPIView):
-    serializer_class = RequestSerializers
+    serializer_class = RequestSerializer
     permission_classes = [AllowAny]
     filter_backends = []
     parser_classes = [JSONParser, MultiPartParser, FormParser]
