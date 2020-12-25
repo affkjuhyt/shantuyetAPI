@@ -5,7 +5,7 @@ from userprofile.models import UserProfile, Owner, SecondaryOwner
 
 
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'user_type', 'fullname', 'phone_number', 'email', 'gender', 'address',
+    list_display = ['id', 'user', 'user_type', 'fullname', 'phone_number', 'email', 'address',
                     'province']
     search_fields = ['fullname', 'phone_number']
     raw_id_fields = ['user']
@@ -15,7 +15,7 @@ admin.site.register(UserProfile , UserProfileAdmin)
 
 
 class OwnerAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'user_type', 'fullname', 'phone_number', 'email', 'gender', 'address',
+    list_display = ['id', 'user', 'user_type', 'fullname', 'phone_number', 'email', 'address',
                     'province']
     search_fields = ['fullname', 'phone_number']
     raw_id_fields = ['user']
