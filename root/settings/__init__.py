@@ -9,3 +9,4 @@ from .apps import *
 from .database import *
 from .drf_jwt import *
 from .restfw import *
+from .swagger import *

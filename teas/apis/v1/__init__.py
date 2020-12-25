@@ -1,1 +1,1 @@
-from .teas import TeasView
+from .teas import TeasView, TeasAdminView

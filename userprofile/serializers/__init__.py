@@ -1,3 +1,3 @@
-from .user_profile import UserProfileSerializers
-from .owner import OwnerSerializers
-from .secondary_owner import SecondaryOwnerSerializers
+from .user_profile import UserProfileSerializer
+from .owner import OwnerSerializer
+from .secondary_owner import SecondaryOwnerSerializer

@@ -7,13 +7,13 @@ from userprofile.permissions import OwnerOnly, SecondaryOwnerOnly
 from rest_framework.viewsets import ReadOnlyModelViewSet, ViewSetMixin
 
 from teas.models import Teas
-from teas.serializers import TeasSerializers
+from teas.serializers import TeasSerializer
 
 logger = logging.getLogger(__name__.split('.')[0])
 
 
 class TeasView(ReadOnlyModelViewSet):
-    serializer_class = TeasSerializers
+    serializer_class = TeasSerializer
     permission_classes = [AllowAny]
     parser_classes = [JSONParser, MultiPartParser, FormParser]
 
@@ -22,7 +22,7 @@ class TeasView(ReadOnlyModelViewSet):
 
 
 class TeasAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListCreateAPIView):
-    serializer_class = TeasSerializers
+    serializer_class = TeasSerializer
     permission_classes = [AllowAny]
     filter_backends = []
     parser_classes = [JSONParser, MultiPartParser, FormParser]

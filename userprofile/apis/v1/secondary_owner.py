@@ -10,15 +10,15 @@ from rest_framework.viewsets import ReadOnlyModelViewSet, ViewSetMixin
 from request.models import Request
 from root.authentications import BaseUserJWTAuthentication
 from teas.models import Teas
-from teas.serializers import TeasSerializers
+from teas.serializers import TeasSerializer
 from userprofile.models import SecondaryOwner
-from userprofile.serializers import SecondaryOwnerSerializers
+from userprofile.serializers import SecondaryOwnerSerializer
 
 logger = logging.getLogger(__name__.split('.')[0])
 
 
 class SecondaryOwnerPublicView(ReadOnlyModelViewSet):
-    serializer_class = SecondaryOwnerSerializers
+    serializer_class = SecondaryOwnerSerializer
     permission_classes = [AllowAny]
     parser_classes = [JSONParser, MultiPartParser, FormParser]
 
@@ -40,7 +40,7 @@ class SecondaryOwnerPublicView(ReadOnlyModelViewSet):
 
 
 class SecondaryOwnerAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListCreateAPIView):
-    serializer_class = SecondaryOwnerSerializers
+    serializer_class = SecondaryOwnerSerializer
     authentication_classes = [BaseUserJWTAuthentication]
     permission_classes = [AllowAny]
     parser_classes = [JSONParser, MultiPartParser, FormParser]

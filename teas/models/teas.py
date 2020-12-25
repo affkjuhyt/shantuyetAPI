@@ -3,12 +3,12 @@ import logging
 from django.db import models
 
 from userprofile.models import UserProfile, Owner
-from utils.base_models import BaseModel
+from utils.base_models import BaseTimeStampModel
 
 logger = logging.getLogger(__name__.split('.')[0])
 
 
-class Teas(BaseModel):
+class Teas(BaseTimeStampModel):
     owner = models.ForeignKey(Owner, null=True,on_delete=models.CASCADE)
     name = models.CharField(max_length=1000, null=True)
     age = models.IntegerField(default=0)

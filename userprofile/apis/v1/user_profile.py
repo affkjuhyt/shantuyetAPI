@@ -1,17 +1,17 @@
 import logging
 
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
-from rest_framework.viewsets import GenericViewSet
+from rest_framework.viewsets import GenericViewSet, ReadOnlyModelViewSet
 
 from root.authentications import BaseUserJWTAuthentication
 from userprofile.models import UserProfile
-from userprofile.serializers import UserProfileSerializers
+from userprofile.serializers import UserProfileSerializer
 
 logger = logging.getLogger(__name__.split('.')[0])
 
 
-class UserPublicView(GenericViewSet):
-    serializer_class = UserProfileSerializers
+class UserPublicView(ReadOnlyModelViewSet):
+    serializer_class = UserProfileSerializer
     authentication_classes = [BaseUserJWTAuthentication]
     filter_fields = []
     parser_classes = [JSONParser, MultiPartParser, FormParser]
