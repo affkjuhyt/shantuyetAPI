@@ -5,9 +5,15 @@ from userprofile.apis.v1 import UserPublicView, OwnerView, SecondaryOwnerView
 public_router = ExtendedSimpleRouter()
 
 public_router.register(
-    r'user-profile',
+    r'owner',
     UserPublicView,
-    basename='v1-user-profile'
+    basename='v1-owner'
+)
+
+public_router.register(
+    r'secondary-owner',
+    UserPublicView,
+    basename='v1-secondary-owner'
 )
 
 userprofile_public_urlpatterns = public_router.urls
