@@ -6,7 +6,7 @@ from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from request.models import Request
+from transfer.models import Transfer
 from userprofile.models import Owner, SecondaryOwner
 from rest_framework.viewsets import ReadOnlyModelViewSet, ViewSetMixin
 
@@ -45,11 +45,11 @@ class TeasAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListC
     @action(detail=True, methods=['get'], url_path='info_secondary_owner', serializer_class=OwnerSerializer)
     def get_info_secondary_owner(self, *args, **kwargs):
         tea = self.get_object()
-        requests = Request.objects.filter(tea=tea)
-        if len(requests) == 0:
+        transfers = Transfer.objects.filter(tea=tea)
+        if len(transfers) == 0:
             return Response({"message": "Khong co chu so huu thu cap"})
 
-        for request in requests:
-            secondary_owner = SecondaryOwner.objects.filter(secondary_owner=request)
+        for transfer in transfers:
+            secondary_owner = SecondaryOwner.objects.filter(secondary_owner=transfer)
             serializer = SecondaryOwnerSerializer(secondary_owner, many=True)
             return Response(serializer.data)

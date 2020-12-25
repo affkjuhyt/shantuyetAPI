@@ -5,7 +5,7 @@ from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ReadOnlyModelViewSet
 
-from request.models import Request
+from transfer.models import Transfer
 from root.authentications import BaseUserJWTAuthentication
 from teas.models import Teas
 from teas.serializers import TeasSerializer
@@ -40,11 +40,11 @@ class UserPublicView(GenericViewSet):
             serializer_class=TeasSerializer)
     def get_secondary_owner_teas(self, *args, **kwargs):
         secondary_owner = self.get_object()
-        requests = Request.objects.filter(secondary_owner=secondary_owner)
-        if len(requests) == 0:
+        transfers = Transfer.objects.filter(secondary_owner=secondary_owner)
+        if len(transfers) == 0:
             return Response({"message": "Khong co san pham"})
 
-        for request in requests:
-            teas = Teas.objects.filter(id=request.id)
+        for transfer in transfers:
+            teas = Teas.objects.filter(id=transfer.id)
             serializer = TeasSerializer(teas, many=True)
             return Response(serializer.data)

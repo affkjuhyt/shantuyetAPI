@@ -9,12 +9,12 @@ from userprofile.models import Owner, SecondaryOwner
 logger = logging.getLogger(__name__.split('.')[0])
 
 
-class Request(BaseModel):
+class Transfer(BaseModel):
     PROCESSING = 'processing'
     APPROVED = 'approved'
     REJECT = 'reject'
 
-    REQUEST_STATUS = (
+    TRANSFER_STATUS = (
         (PROCESSING, 'Processing'),
         (APPROVED, 'Approved'),
         (REJECT, 'Reject')
@@ -26,4 +26,4 @@ class Request(BaseModel):
                                         related_name="secondary_owner")
     name = models.CharField(max_length=1000, null=True)
     date = models.DateTimeField(auto_now_add=True)
-    request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default=PROCESSING)
+    transfer_status = models.CharField(max_length=20, choices=TRANSFER_STATUS, default=PROCESSING)
