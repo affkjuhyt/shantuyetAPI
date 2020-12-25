@@ -25,19 +25,6 @@ class SecondaryOwnerPublicView(ReadOnlyModelViewSet):
     def get_queryset(self):
         return SecondaryOwner.objects.filter()
 
-    # @action(detail=True, methods=['get'], url_path='secondary_owner_teas',
-    #         serializer_class=TeasSerializers)
-    # def get_secondary_owner_teas(self, *args, **kwargs):
-    #     secondary_owner = self.get_object()
-    #     requests = Request.objects.filter(secondary_owner=secondary_owner)
-    #     if len(requests) == 0:
-    #         return Response({"message": "Khong co"})
-    #
-    #     for request in requests:
-    #         teas = Teas.objects.filter(id=request.id)
-    #         serializer = TeasSerializers(teas, many=True)
-    #         return Response(serializer.data)
-
 
 class SecondaryOwnerAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListCreateAPIView):
     serializer_class = SecondaryOwnerSerializer
