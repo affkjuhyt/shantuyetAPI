@@ -16,5 +16,5 @@ INSTALLED_APPS = [
     'news',
     'teas',
     'userprofile',
-    'request',
+    'transfer',
 ]

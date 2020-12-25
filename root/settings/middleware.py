@@ -21,7 +21,7 @@ class RequestMonitorMiddleware(MiddlewareMixin):
         request.start_time = datetime.datetime.utcnow()
 
     def process_response(self, request, response):
-        # Enable if want to log all queries (DEBUG) in 1 request
+        # Enable if want to log all queries (DEBUG) in 1 transfer
         # if connection.queries:
         #     for query in connection.queries:
         #         logger.debug(query)
