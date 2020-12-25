@@ -1,18 +1,18 @@
 from rest_framework_extensions.routers import ExtendedSimpleRouter
 
-from userprofile.apis.v1 import UserPublicView, OwnerView, SecondaryOwnerView
+from userprofile.apis.v1 import UserPublicView, OwnerPublicView, SecondaryOwnerPublicView, OwnerAdminView, SecondaryOwnerAdminView
 
 public_router = ExtendedSimpleRouter()
 
 public_router.register(
     r'owner',
-    UserPublicView,
+    OwnerPublicView,
     basename='v1-owner'
 )
 
 public_router.register(
     r'secondary-owner',
-    UserPublicView,
+    SecondaryOwnerPublicView,
     basename='v1-secondary-owner'
 )
 
@@ -28,13 +28,13 @@ admin_router.register(
 
 admin_router.register(
     r'owners',
-    OwnerView,
+    OwnerAdminView,
     basename='v1-owner'
 )
 
 admin_router.register(
     r'secondary-owners',
-    SecondaryOwnerView,
+    SecondaryOwnerAdminView,
     basename='v1-secondary-owner'
 )
 
