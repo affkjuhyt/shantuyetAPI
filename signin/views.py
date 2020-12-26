@@ -37,6 +37,7 @@ class GoogleView(APIView):
             user.email = data['email']
             user.save()
             secondary_owner = SecondaryOwner(user=user)
+            secondary_owner.fullname = user.username
             secondary_owner.user_type = 'secondary_owner'
             secondary_owner.save()
 
@@ -70,6 +71,7 @@ class FacebookView(APIView):
             user.email = user_info_response["id"]
             user.save()
             secondary_owner = SecondaryOwner(user=user)
+            secondary_owner.fullname = user.username
             secondary_owner.user_type = 'secondary_owner'
             secondary_owner.save()
 
