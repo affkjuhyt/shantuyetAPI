@@ -17,12 +17,12 @@ logger = logging.getLogger(__name__.split('.')[0])
 
 class UserPublicView(GenericViewSet):
     serializer_class = UserProfileSerializer
-    # authentication_classes = [BaseUserJWTAuthentication]
+    authentication_classes = [BaseUserJWTAuthentication]
     filter_fields = []
     parser_classes = [JSONParser, MultiPartParser, FormParser]
 
     def get_queryset(self):
-        return UserProfile.objects.filter().all()
+        return UserProfile.objects.filter(user_id=self.request.user.id).all()
 
     def list(self, request, *args, **kwargs):
         user_profile = self.get_queryset().first()
