@@ -8,6 +8,7 @@ from teas.urls import teas_public_urlpatterns, teas_urlpatterns
 from userprofile.urls import userprofile_public_urlpatterns, userprofile_urlpatterns
 from transfer.urls import transfer_public_urlpatterns
 from signin import views
+from authentication.urls import authentication_urlpatterns
 
 
 schema_view = get_schema_view(
@@ -21,7 +22,7 @@ schema_view = get_schema_view(
 
 external_public_urlpatterns = news_public_urlpatterns + teas_public_urlpatterns + userprofile_public_urlpatterns + \
                               transfer_public_urlpatterns
-external_urlpatterns = news_urlpatterns + userprofile_urlpatterns + teas_urlpatterns
+external_urlpatterns = news_urlpatterns + userprofile_urlpatterns + teas_urlpatterns + authentication_urlpatterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),

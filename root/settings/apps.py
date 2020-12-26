@@ -17,4 +17,5 @@ INSTALLED_APPS = [
     'teas',
     'userprofile',
     'transfer',
+    'authentication',
 ]
