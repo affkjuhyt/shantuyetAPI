@@ -43,8 +43,7 @@ class UserPublicView(GenericViewSet):
         transfers = Transfer.objects.filter(secondary_owner=secondary_owner)
         if len(transfers) == 0:
             return Response({"message": "Khong co san pham"})
-
         for transfer in transfers:
-            teas = Teas.objects.filter(id=transfer.id)
+            teas = Teas.objects.filter(transfer=transfer)
             serializer = TeasSerializer(teas, many=True)
             return Response(serializer.data)
