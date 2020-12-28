@@ -60,7 +60,6 @@ class FacebookView(APIView):
         user_info_url = FACEBOOK_URL + request.data.get("id")
         print(request.data.get("id"), request.data.get("token"))
         user_info_payload = {
-            "fields": "id,name",
             "access_token": request.data.get("token"),
         }
 
@@ -84,7 +83,7 @@ class FacebookView(APIView):
         token = jwt_encode_handler(payload)
 
         response = {}
-        response["username"] = user.username
+        response["user_id"] = user.id
         response["access_token"] = str(token)
         return Response(response)
 
