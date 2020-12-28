@@ -5,7 +5,7 @@ from transfer.models import Transfer
 
 
 class TransferAdmin(admin.ModelAdmin):
-    list_display = ('id', 'tea', 'owner', 'secondary_owner', 'name', 'date', 'transfer_status')
+    list_display = ('id', 'tea', 'owner', 'secondary_owner', 'name', 'date', 'status')
     search_fields = ['name']
     raw_id_fields = ['tea', 'owner', 'secondary_owner']
 

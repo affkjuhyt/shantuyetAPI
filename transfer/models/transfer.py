@@ -26,4 +26,4 @@ class Transfer(BaseModel):
                                         related_name="secondary_owner")
     name = models.CharField(max_length=1000, null=True)
     date = models.DateTimeField(auto_now_add=True)
-    transfer_status = models.CharField(max_length=20, choices=TRANSFER_STATUS, default=PROCESSING)
+    status = models.CharField(max_length=20, choices=TRANSFER_STATUS, default=PROCESSING)

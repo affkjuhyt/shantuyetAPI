@@ -10,4 +10,4 @@ logger = logging.getLogger(__name__)
 class TransferSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transfer
-        fields = ['id', 'tea', 'owner', 'secondary_owner', 'name', 'date', 'transfer_status']
+        fields = ['id', 'tea', 'owner', 'secondary_owner', 'name', 'date', 'status']
