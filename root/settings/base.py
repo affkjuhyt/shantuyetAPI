@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+from datetime import timedelta
+
+from rest_framework import settings
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
 # Quick-start development settings - unsuitable for production
@@ -76,6 +80,11 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=14),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/

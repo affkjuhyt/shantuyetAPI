@@ -2,13 +2,14 @@ from django.contrib import admin
 from django.urls import path, include
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
+from rest_framework_simplejwt import views as jwt_views
 
 from news.urls import news_public_urlpatterns, news_urlpatterns
 from teas.urls import teas_public_urlpatterns, teas_urlpatterns
 from userprofile.urls import userprofile_public_urlpatterns, userprofile_urlpatterns
 from transfer.urls import transfer_public_urlpatterns
 from signin import views
-from authentication.urls import authentication_urlpatterns
+# from authentication.urls import authentication_urlpatterns
 
 
 schema_view = get_schema_view(
@@ -22,7 +23,7 @@ schema_view = get_schema_view(
 
 external_public_urlpatterns = news_public_urlpatterns + teas_public_urlpatterns + userprofile_public_urlpatterns + \
                               transfer_public_urlpatterns
-external_urlpatterns = news_urlpatterns + userprofile_urlpatterns + teas_urlpatterns + authentication_urlpatterns
+external_urlpatterns = news_urlpatterns + userprofile_urlpatterns + teas_urlpatterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -32,4 +33,5 @@ urlpatterns = [
     path('v1/', include(external_urlpatterns)),
     path('signingg/', views.GoogleView.as_view(), name='signin-gg'),
     path('signinfb/', views.FacebookView.as_view(), name='signin-fb'),
+    path('login', jwt_views.TokenObtainPairView.as_view(), name='login'),
 ]
