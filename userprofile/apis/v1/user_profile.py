@@ -22,7 +22,7 @@ class UserPublicView(ReadOnlyModelViewSet):
     parser_classes = [JSONParser, MultiPartParser, FormParser]
 
     def get_queryset(self):
-        return UserProfile.objects.filter(user_id=self.request.user).all()
+        return UserProfile.objects.filter(user_id=self.request.user.id).all()
 
     @action(detail=True, methods=['get'], url_path='owner_teas', serializer_class=TeasSerializer)
     def get_owner_tea(self, *args, **kwargs):
