@@ -33,5 +33,6 @@ urlpatterns = [
     path('v1/', include(external_urlpatterns)),
     path('signingg/', views.GoogleView.as_view(), name='signin-gg'),
     path('signinfb/', views.FacebookView.as_view(), name='signin-fb'),
-    path('login/', jwt_views.TokenObtainPairView.as_view(), name='login'),
+    path('api/register/', views.RegisterAPI.as_view(), name='register'),
+    path('api/login/', views.LoginAPI.as_view(), name='login'),
 ]

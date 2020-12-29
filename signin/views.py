@@ -4,7 +4,9 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
-from rest_framework import status
+from knox.models import AuthToken
+from rest_framework import status, generics, permissions
+from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.response import Response
 from rest_framework.utils import json
 from rest_framework.views import APIView
@@ -12,7 +14,9 @@ from rest_framework_jwt.settings import api_settings
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from root import settings
-from signin.serializers import UserLoginSerializer
+from django.contrib.auth import login
+from knox.views import LoginView as KnoxLoginView
+from signin.serializers import RegisterSerializer, UserSerializer
 from userprofile.models import UserProfile, SecondaryOwner
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
@@ -88,31 +92,25 @@ class FacebookView(APIView):
         return Response(response)
 
 
-class UserLoginView(APIView):
-    def post(self, request):
-        serializer = UserLoginSerializer(data=request.data)
-        if serializer.is_valid():
-            user = authenticate(
-                request,
-                username=serializer.validated_data['email'],
-                password=serializer.validated_data['password']
-            )
-            if user:
-                refresh = TokenObtainPairSerializer.get_token(user)
-                data = {
-                    'refresh_token': str(refresh),
-                    'access_token': str(refresh.access_token),
-                    'access_expires': int(settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'].total_seconds()),
-                    'refresh_expires': int(settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'].total_seconds())
-                }
-                return Response(data, status=status.HTTP_200_OK)
+class RegisterAPI(generics.GenericAPIView):
+    serializer_class = RegisterSerializer
 
-            return Response({
-                'error_message': 'Email or password is incorrect!',
-                'error_code': 400
-            }, status=status.HTTP_400_BAD_REQUEST)
-
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
         return Response({
-            'error_messages': serializer.errors,
-            'error_code': 400
-        }, status=status.HTTP_400_BAD_REQUEST)
+        "user": UserSerializer(user, context=self.get_serializer_context()).data,
+        "token": AuthToken.objects.create(user)[1]
+        })
+
+
+class LoginAPI(KnoxLoginView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, format=None):
+        serializer = AuthTokenSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        login(request, user)
+        return super(LoginAPI, self).post(request, format=None)
