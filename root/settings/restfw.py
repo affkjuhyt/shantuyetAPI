@@ -34,11 +34,9 @@ REST_FRAMEWORK = {
     ),
     'JWT_RESPONSE_PAYLOAD_HANDLER': 'utils.jwt.jwt_response_payload_handler',
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
+        'knox.auth.TokenAuthentication',
     ),
     'DEFAULT_THROTTLE_CLASSES': (
         'utils.base_throttle.RequestMethodThrottle',
