@@ -1,14 +1,10 @@
 import logging
 
-from rest_framework.decorators import action
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ReadOnlyModelViewSet
 
-from transfer.models import Transfer
 from root.authentications import BaseUserJWTAuthentication
-from teas.models import Teas
-from teas.serializers import TeasSerializer
 from userprofile.models import UserProfile
 from userprofile.serializers import UserProfileSerializer
 
