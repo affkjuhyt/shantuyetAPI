@@ -9,7 +9,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
-    'knox',
+    'rest_framework.authtoken',
     'drf_yasg',
     'django_extensions',
     'django_filters',
@@ -18,4 +18,5 @@ INSTALLED_APPS = [
     'teas',
     'userprofile',
     'transfer',
+    'signin',
 ]
