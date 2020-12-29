@@ -1,22 +1,24 @@
-
+import jwt
 import requests
 from django.contrib.auth import authenticate
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
-from knox.models import AuthToken
-from rest_framework import status, generics, permissions
+# from knox.models import AuthToken
+from rest_framework import status, generics, permissions, response
 from rest_framework.authtoken.serializers import AuthTokenSerializer
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.utils import json
 from rest_framework.views import APIView
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework_jwt.settings import api_settings
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from root import settings
 from django.contrib.auth import login
-from knox.views import LoginView as KnoxLoginView
-from signin.serializers import RegisterSerializer, UserSerializer
+# from knox.views import LoginView as KnoxLoginView
+# from signin.serializers import RegisterSerializer, UserSerializer
 from userprofile.models import UserProfile, SecondaryOwner
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
@@ -92,25 +94,26 @@ class FacebookView(APIView):
         return Response(response)
 
 
-class RegisterAPI(generics.GenericAPIView):
-    serializer_class = RegisterSerializer
+class LoginAPI(APIView):
 
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.save()
-        return Response({
-        "user": UserSerializer(user, context=self.get_serializer_context()).data,
-        "token": AuthToken.objects.create(user)[1]
-        })
+    def post(self, request):
+        if not request.data:
+            return Response({'Error': "Please provide username/password"}, status=status.HTTP_400_BAD_REQUEST)
 
+        username = request.data['username']
+        password = request.data['password']
 
-class LoginAPI(KnoxLoginView):
-    permission_classes = (permissions.AllowAny,)
+        try:
+            user = authenticate(username=username, password=password)
+        except User.DoesNotExist:
+            return Response({'Error': "Invalid username/password"}, status=status.HTTP_400_BAD_REQUEST)
 
-    def post(self, request, format=None):
-        serializer = AuthTokenSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        login(request, user)
-        return super(LoginAPI, self).post(request, format=None)
+        if user:
+            payload = jwt_payload_handler(user)
+            jwt_token = jwt_encode_handler(payload)
+
+            response={}
+            response["username"] = user.username
+            response["access_token"] = jwt_token
+
+            return Response(response)
