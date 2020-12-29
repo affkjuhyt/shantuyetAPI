@@ -17,24 +17,14 @@ logger = logging.getLogger(__name__.split('.')[0])
 
 class UserPublicView(ReadOnlyModelViewSet):
     serializer_class = UserProfileSerializer
-    authentication_classes = [BaseUserJWTAuthentication]
+    # authentication_classes = [BaseUserJWTAuthentication]
     filter_fields = []
     parser_classes = [JSONParser, MultiPartParser, FormParser]
 
     def get_queryset(self):
-        return UserProfile.objects.filter(user_id=self.request.user.id).all()
+        return UserProfile.objects.filter(user_id=self.request.user).all()
 
-    @action(detail=True, methods=['get'], url_path='owner_teas', serializer_class=TeasSerializer)
-    def get_owner_tea(self, *args, **kwargs):
-        owner = self.get_object()
-        teas = Teas.objects.filter(owner=owner)
-        serializer = TeasSerializer(teas, many=True)
-        return Response(serializer.data)
-
-    @action(detail=True, methods=['get'], url_path='secondary_owner_teas', serializer_class=TeasSerializer)
-    def get_secondary_owner_teas(self, *args, **kwargs):
-        secondary_owner = self.get_object()
-        tea_ids = Transfer.objects.filter(secondary_owner=secondary_owner).values_list('tea_id', flat=True)
-        teas = Teas.objects.filter(id__in=tea_ids)
-        serializer = TeasSerializer(teas, many=True)
+    def list(self, request, *args, **kwargs):
+        user_profile = self.get_queryset().first()
+        serializer = self.get_serializer(user_profile)
         return Response(serializer.data)

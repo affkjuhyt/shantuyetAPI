@@ -34,9 +34,9 @@ class OwnerAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.List
     def get_queryset(self):
         return Owner.objects.filter()
 
-    # @action(detail=True, methods=['get'], url_path='owner_teas', serializer_class=TeasSerializers)
-    # def get_owner_tea(self, *args, **kwargs):
-    #     owner = self.get_object()
-    #     teas = Teas.objects.filter(owner=owner)
-    #     serializer = TeasSerializers(teas, many=True)
-    #     return Response(serializer.data)
+    @action(detail=True, methods=['get'], url_path='owner_teas', serializer_class=TeasSerializer)
+    def get_owner_tea(self, *args, **kwargs):
+        owner = self.get_object()
+        teas = Teas.objects.filter(owner=owner)
+        serializer = TeasSerializer(teas, many=True)
+        return Response(serializer.data)
