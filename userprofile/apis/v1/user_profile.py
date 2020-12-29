@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__.split('.')[0])
 
 class UserPublicView(ReadOnlyModelViewSet):
     serializer_class = UserProfileSerializer
-    # authentication_classes = [BaseUserJWTAuthentication]
+    authentication_classes = [BaseUserJWTAuthentication]
     filter_fields = []
     parser_classes = [JSONParser, MultiPartParser, FormParser]
 
