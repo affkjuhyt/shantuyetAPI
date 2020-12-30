@@ -1,5 +1,6 @@
 import logging
 
+from django.http import JsonResponse
 from rest_framework import generics
 from rest_framework.decorators import action
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
@@ -13,7 +14,7 @@ from rest_framework.viewsets import ReadOnlyModelViewSet, ViewSetMixin
 
 from teas.models import Teas
 from teas.serializers import TeasSerializer
-from userprofile.serializers import OwnerSerializer, SecondaryOwnerSerializer
+from userprofile.serializers import OwnerSerializer, SecondaryOwnerSerializer, UserProfileSerializer
 
 logger = logging.getLogger(__name__.split('.')[0])
 
@@ -44,6 +45,14 @@ class TeasView(ReadOnlyModelViewSet):
             secondary_owner = SecondaryOwner.objects.filter(secondary_owner=transfer)
             serializer = SecondaryOwnerSerializer(secondary_owner, many=True)
             return Response(serializer.data)
+
+    @action(detail=True, methods=['get'], url_path='info-user')
+    def get_info_user(self, *args, **kwargs):
+        tea = self.get_object()
+        info_user_data = []
+        info_user_data.append({'tea': TeasSerializer(tea).data})
+
+        return Response({'data': info_user_data})
 
 
 class TeasAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListCreateAPIView):
