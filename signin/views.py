@@ -110,4 +110,4 @@ class LoginAPI(APIView):
             response["username"] = user.username
             response["access_token"] = jwt_token
 
-            return Response(response)
+            return Response(response, status=status.HTTP_200_OK)
