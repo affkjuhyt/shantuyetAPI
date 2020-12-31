@@ -23,11 +23,18 @@ class TeasSerializer(serializers.ModelSerializer):
         response['owner_address'] = instance.owner.address
 
         transfers = Transfer.objects.filter(tea=instance)
-        for transfer in transfers:
-            secondary_owner = transfer.secondary_owner
-            response['secondary_owner_name'] = secondary_owner.fullname
-            response['secondary_owner_phone'] = secondary_owner.phone_number
-            response['secondary_owner_email'] = secondary_owner.email
-            response['secondary_owner_adrress'] = secondary_owner.address
+        if len(transfers) > 0:
+            for transfer in transfers:
+                secondary_owner = transfer.secondary_owners
+                if secondary_owner is not None:
+                    response['secondary_owner_name'] = secondary_owner.fullname
+                    response['secondary_owner_phone'] = secondary_owner.phone_number
+                    response['secondary_owner_email'] = secondary_owner.email
+                    response['secondary_owner_adrress'] = secondary_owner.address
+        else:
+            response['secondary_owner_name'] = ""
+            response['secondary_owner_phone'] = ""
+            response['secondary_owner_email'] = ""
+            response['secondary_owner_adrress'] = ""
 
         return response
