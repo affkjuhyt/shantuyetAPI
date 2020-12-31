@@ -37,14 +37,13 @@ class TeasView(ReadOnlyModelViewSet):
     @action(detail=True, methods=['get'], url_path='info_secondary_owner', serializer_class=OwnerSerializer)
     def get_info_secondary_owner(self, *args, **kwargs):
         tea = self.get_object()
-        transfers = Transfer.objects.filter(tea=tea)
-        if len(transfers) == 0:
+        transfer_ids = Transfer.objects.filter(tea=tea).values_list('secondary_owner_id', flat=True)
+        if len(transfer_ids) == 0:
             return Response({"message": "Khong co chu so huu thu cap"})
 
-        for transfer in transfers:
-            secondary_owner = SecondaryOwner.objects.filter(secondary_owner=transfer)
-            serializer = SecondaryOwnerSerializer(secondary_owner, many=True)
-            return Response(serializer.data)
+        secondary_owner = SecondaryOwner.objects.filter(id__in=transfer_ids)
+        serializer = SecondaryOwnerSerializer(secondary_owner, many=True)
+        return Response(serializer.data)
 
     @action(detail=True, methods=['get'], url_path='info-user')
     def get_info_user(self, *args, **kwargs):
