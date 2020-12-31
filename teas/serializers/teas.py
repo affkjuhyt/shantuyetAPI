@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 class TeasSerializer(serializers.ModelSerializer):
     class Meta:
         model = Teas
-        fields = ['id', 'owner', 'name', 'age', 'diameter', 'status', 'lat', 'lon', 'height',
+        fields = ['id', 'owner', 'name', 'age', 'diameter', 'lat', 'lon', 'height',
                   'image1', 'image2', 'image3', 'image4']
 
     def to_representation(self, instance):
@@ -30,10 +30,12 @@ class TeasSerializer(serializers.ModelSerializer):
                 response['secondary_owner_phone'] = secondary_owner.phone_number
                 response['secondary_owner_email'] = secondary_owner.email
                 response['secondary_owner_adrress'] = secondary_owner.address
+                response['tea_status'] = transfer.status
         else:
             response['secondary_owner_name'] = ""
             response['secondary_owner_phone'] = ""
             response['secondary_owner_email'] = ""
             response['secondary_owner_adrress'] = ""
+            response['tea_status'] = ""
 
         return response
