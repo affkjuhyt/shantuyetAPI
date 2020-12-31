@@ -3,9 +3,11 @@ import logging
 from django.http import JsonResponse
 from rest_framework import generics
 from rest_framework.decorators import action
+from rest_framework.generics import ListAPIView
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from rest_framework.filters import SearchFilter, OrderingFilter
 
 from root.authentications import BaseUserJWTAuthentication
 from transfer.models import Transfer
@@ -23,6 +25,8 @@ class TeasView(ReadOnlyModelViewSet):
     serializer_class = TeasSerializer
     permission_classes = [AllowAny]
     parser_classes = [JSONParser, MultiPartParser, FormParser]
+    filter_backends = (SearchFilter, OrderingFilter)
+    search_fields = ['name']
 
     def get_queryset(self):
         return Teas.objects.filter()
