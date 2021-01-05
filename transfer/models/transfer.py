@@ -22,10 +22,14 @@ class Transfer(BaseModel):
         (REJECT, 'Reject')
     )
 
-    tea = models.ForeignKey(Teas, null=True, on_delete=models.CASCADE)
+    tea = models.ForeignKey(Teas, null=True, on_delete=models.CASCADE, related_name="tea")
     owner = models.ForeignKey(Owner, null=True, on_delete=models.CASCADE, related_name="owner")
     secondary_owner = models.ForeignKey(SecondaryOwner, null=True, on_delete=models.CASCADE,
                                         related_name="secondary_owner")
     name = models.CharField(max_length=1000, null=True)
     date = models.DateTimeField(auto_now_add=True)
+    species = models.CharField(max_length=1000, null=True)
+    quantity = models.IntegerField(default=1)
+    price = models.FloatField(max_length=2000, null=True)
+    total_price = models.FloatField(max_length=2000, null=True)
     status = models.CharField(max_length=40, choices=TRANSFER_STATUS, default=WAIT_OWNER_AGREE)
