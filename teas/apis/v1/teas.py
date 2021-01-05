@@ -58,14 +58,6 @@ class TeasView(ReadOnlyModelViewSet):
 
         return Response({'data': info_user_data})
 
-    @action(detail=True, methods=['get'], url_path='history_transfer', serializer_class=TransferSerializer)
-    def get_history_transfer(self, *args, **kwargs):
-        tea = self.get_object()
-        transfer = Transfer.objects.select_related('tea').filter(tea=tea)
-        transfer = TransferSerializer(transfer, many=True).data
-
-        return Response(transfer)
-
 
 class TeasAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListCreateAPIView):
     serializer_class = TeasSerializer
