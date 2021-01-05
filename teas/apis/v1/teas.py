@@ -11,6 +11,7 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 
 from root.authentications import BaseUserJWTAuthentication
 from transfer.models import Transfer
+from transfer.serializers import TransferSerializer
 from userprofile.models import Owner, SecondaryOwner
 from rest_framework.viewsets import ReadOnlyModelViewSet, ViewSetMixin
 
@@ -67,3 +68,11 @@ class TeasAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListC
 
     def get_queryset(self):
         return Teas.objects.filter().all()
+
+    @action(detail=True, methods=['get'], url_path='history_transfer', serializer_class=TransferSerializer)
+    def get_history_transfer(self, *args, **kwargs):
+        tea = self.get_object()
+        transfer = Transfer.objects.select_related('tea').filter(tea=tea)
+        transfer = TransferSerializer(transfer, many=True).data
+
+        return Response(transfer)
