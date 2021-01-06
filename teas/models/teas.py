@@ -16,7 +16,7 @@ class Teas(BaseTimeStampModel):
     height = models.FloatField(max_length=2000, null=True)
     lat = models.DecimalField(max_digits=15, decimal_places=9)
     lon = models.DecimalField(max_digits=15, decimal_places=9)
-    tree_area = models.CharField(max_length=1000, null=True)
+    # tree_area = models.CharField(max_length=1000, null=True)
     image1 = models.ImageField(upload_to="teas/%Y/%m/%d", null=True, blank=True)
     image2 = models.ImageField(upload_to="teas/%Y/%m/%d", null=True, blank=True)
     image3 = models.ImageField(upload_to="teas/%Y/%m/%d", null=True, blank=True)
