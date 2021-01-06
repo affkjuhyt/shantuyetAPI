@@ -12,7 +12,7 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from root.authentications import BaseUserJWTAuthentication
 from transfer.models import Transfer
 from transfer.serializers import TransferSerializer
-from userprofile.models import Owner, SecondaryOwner
+from userprofile.models import Owner, SecondaryOwner, UserProfile
 from rest_framework.viewsets import ReadOnlyModelViewSet, ViewSetMixin
 
 from teas.models import Teas
@@ -58,16 +58,6 @@ class TeasView(ReadOnlyModelViewSet):
 
         return Response({'data': info_user_data})
 
-    @action(detail=True, methods=['post'], url_path='register-transfer', serializer_class=TransferSerializer)
-    def post_register_transfer(self, request, *args, **kwargs):
-        tea = self.get_object()
-        owner = Owner.objects.filter(teas=tea)
-        breakpoint()
-        # Transfer.objects.create(tea=tea,
-        #                         status=)
-
-        return Response('Register transfer is successfully.')
-
 
 class TeasAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListCreateAPIView):
     serializer_class = TeasSerializer
@@ -86,3 +76,14 @@ class TeasAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListC
         transfer = TransferSerializer(transfer, many=True).data
 
         return Response(transfer)
+
+    @action(detail=True, methods=['post'], url_path='register-transfer', serializer_class=TransferSerializer)
+    def post_register_transfer(self, request, *args, **kwargs):
+        tea = self.get_object()
+        owner = Owner.objects.filter(teas=tea).first()
+        secondary_owner = SecondaryOwner.objects.filter(user_id=request.user.id).first()
+        Transfer.objects.create(tea=tea,
+                                owner=owner,
+                                secondary_owner=secondary_owner)
+
+        return Response('Register transfer is successfully.')
