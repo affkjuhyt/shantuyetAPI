@@ -70,7 +70,7 @@ class FacebookView(APIView):
             user = User.objects.get(email=user_info_response["id"])
         except User.DoesNotExist:
             user = User()
-            user.username = user_info_response["id"]
+            # user.username = user_info_response["id"]
             user.password = make_password(BaseUserManager().make_random_password())
             user.email = user_info_response["id"]
             user.save()
