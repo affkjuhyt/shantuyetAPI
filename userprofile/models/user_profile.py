@@ -48,6 +48,8 @@ class UserProfile(BaseUserModel):
     district = models.CharField(max_length=500, null=True, blank=True)
     sub_district = models.CharField(max_length=500, null=True, blank=True)
     street = models.CharField(max_length=500, null=True, blank=True)
+    front_view_photo = models.ImageField(upload_to="userprofile/%Y/%m/%d", null=True, blank=True)
+    back_view_photo = models.ImageField(upload_to="userprofile/%Y/%m/%d", null=True, blank=True)
 
     def __str__(self):
         return "%s" % self.fullname
