@@ -45,7 +45,8 @@ class UpdateInfo(ReadOnlyModelViewSet):
             user.username = username
             user.set_password(password)
             user.save()
-            secondary_owner = SecondaryOwner(user=user)
+            secondary_owner = SecondaryOwner.objects.filter(user=user).first()
             secondary_owner.fullname = user.username
+            secondary_owner.save()
 
             return Response({'Success': 'Create user successfully'})
