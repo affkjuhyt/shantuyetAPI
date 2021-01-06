@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__.split('.')[0])
 class News(BaseTimeStampModel):
     title = models.CharField(max_length=2000, null=True)
     short_content = models.CharField(max_length=2000, null=True)
+    short_contentxxxx = models.CharField(max_length=2000, null=True)
     content = models.TextField(blank=True, null=True)
     thumbnail = models.ImageField(upload_to='news/%Y/%m/%d/', null=True, blank=True)
     is_hot = models.BooleanField(default=False)
