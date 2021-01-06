@@ -37,12 +37,10 @@ class GoogleView(APIView):
             user = User.objects.get(email=data['email'])
         except User.DoesNotExist:
             user = User()
-            user.username = data['email']
             user.password = make_password(BaseUserManager().make_random_password())
             user.email = data['email']
             user.save()
             secondary_owner = SecondaryOwner(user=user)
-            secondary_owner.fullname = user.username
             secondary_owner.user_type = 'secondary_owner'
             secondary_owner.save()
 
@@ -70,12 +68,10 @@ class FacebookView(APIView):
             user = User.objects.get(email=user_info_response["id"])
         except User.DoesNotExist:
             user = User()
-            # user.username = user_info_response["id"]
             user.password = make_password(BaseUserManager().make_random_password())
             user.email = user_info_response["id"]
             user.save()
             secondary_owner = SecondaryOwner(user=user)
-            secondary_owner.fullname = user.username
             secondary_owner.user_type = 'secondary_owner'
             secondary_owner.save()
 

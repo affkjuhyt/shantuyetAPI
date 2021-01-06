@@ -7,7 +7,7 @@ from rest_framework.viewsets import GenericViewSet, ReadOnlyModelViewSet, ViewSe
 from django.contrib.auth.models import User
 
 from root.authentications import BaseUserJWTAuthentication
-from userprofile.models import UserProfile
+from userprofile.models import UserProfile, SecondaryOwner
 from userprofile.serializers import UserProfileSerializer
 
 logger = logging.getLogger(__name__.split('.')[0])
@@ -45,5 +45,7 @@ class UpdateInfo(ReadOnlyModelViewSet):
             user.username = username
             user.set_password(password)
             user.save()
+            secondary_owner = SecondaryOwner(user=user)
+            secondary_owner.fullname = user.username
 
             return Response({'Success': 'Create user successfully'})
