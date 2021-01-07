@@ -1,10 +1,13 @@
 import logging
 
+from django.contrib.auth.password_validation import validate_password
 from rest_framework import status, generics
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ReadOnlyModelViewSet, ViewSetMixin
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+from rest_registration.exceptions import BadRequest
 
 from root.authentications import BaseUserJWTAuthentication
 from userprofile.models import UserProfile, SecondaryOwner
@@ -43,8 +46,14 @@ class UpdateInfo(ReadOnlyModelViewSet):
             return Response({'Error': 'Username already exists'})
         else:
             user.username = username
+            try:
+                validate_password(password, user=user)
+            except ValidationError as exc:
+                raise BadRequest(exc.messages[0])
+
             user.set_password(password)
             user.save()
+
             secondary_owner = SecondaryOwner.objects.filter(user=user).first()
             secondary_owner.fullname = user.username
             secondary_owner.save()

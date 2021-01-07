@@ -41,5 +41,5 @@ class SecondaryOwnerAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, gene
         tea_ids = Transfer.objects.filter(secondary_owner=secondary_owner.id).values_list('tea_id', flat=True)
         teas = Teas.objects.filter(id__in=tea_ids)
         serializer = TeasSerializer(teas, many=True)
-        return Response(serializer.data)
 
+        return Response(serializer.data)
