@@ -18,11 +18,11 @@ class NewsView(ReadOnlyModelViewSet):
     permission_classes = [AllowAny]
     parser_classes = [JSONParser, MultiPartParser, FormParser]
     filter_backends = [SearchFilter]
+    filter_fields = ['is_enable', 'is_hot']
     search_fields = ['title']
 
     def get_queryset(self):
-        return News.objects.filter(is_enable=True)
-
+        return News.objects.filter(is_enable=True).order_by('-date_added')
 
 class NewsAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListCreateAPIView):
     serializer_class = NewsSerializer
