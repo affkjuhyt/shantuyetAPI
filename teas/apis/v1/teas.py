@@ -17,7 +17,6 @@ from rest_framework.viewsets import ReadOnlyModelViewSet, ViewSetMixin
 
 from teas.models import Teas
 from teas.serializers import TeasSerializer
-from userprofile.permissions import OwnerOnly, SecondaryOwnerOnly
 from userprofile.serializers import OwnerSerializer, SecondaryOwnerSerializer, UserProfileSerializer
 
 logger = logging.getLogger(__name__.split('.')[0])
@@ -60,6 +59,17 @@ class TeasView(ReadOnlyModelViewSet):
 
         return Response({'data': info_user_data})
 
+
+class TeasAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListCreateAPIView):
+    serializer_class = TeasSerializer
+    authentication_classes = [BaseUserJWTAuthentication]
+    permission_classes = [AllowAny]
+    filter_backends = []
+    parser_classes = [JSONParser, MultiPartParser, FormParser]
+
+    def get_queryset(self):
+        return Teas.objects.filter().all()
+
     @action(detail=True, methods=['get'], url_path='history_transfer', serializer_class=TransferSerializer)
     def get_history_transfer(self, *args, **kwargs):
         tea = self.get_object()
@@ -68,18 +78,7 @@ class TeasView(ReadOnlyModelViewSet):
 
         return Response(transfer)
 
-
-class TeasAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListCreateAPIView):
-    serializer_class = TeasSerializer
-    authentication_classes = [BaseUserJWTAuthentication]
-    filter_backends = []
-    parser_classes = [JSONParser, MultiPartParser, FormParser]
-
-    def get_queryset(self):
-        return Teas.objects.filter().all()
-
-    @action(detail=True, methods=['post'], url_path='register-transfer', serializer_class=TransferSerializer,
-            permission_class=[SecondaryOwnerOnly])
+    @action(detail=True, methods=['post'], url_path='register-transfer', serializer_class=TransferSerializer)
     def post_register_transfer(self, request, *args, **kwargs):
         tea = self.get_object()
         owner = Owner.objects.filter(teas=tea).first()
