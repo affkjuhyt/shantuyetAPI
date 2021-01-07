@@ -35,7 +35,7 @@ class TransferAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.L
     def get_queryset(self):
         return Transfer.objects.filter()
 
-    @action(detail=False, methods=['post'], url_path='approved-request')
+    @action(detail=False, methods=['post'], url_path='accept-requests')
     def post_approved_request(self, request, *args, **kwargs):
 
         try:

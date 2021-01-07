@@ -21,7 +21,7 @@ class NewsView(ReadOnlyModelViewSet):
     search_fields = ['title']
 
     def get_queryset(self):
-        return News.objects.filter()
+        return News.objects.filter(is_enable=True)
 
 
 class NewsAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListCreateAPIView):
@@ -31,4 +31,4 @@ class NewsAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListC
     parser_classes = [JSONParser, MultiPartParser, FormParser]
 
     def get_queryset(self):
-        return News.objects.filter(is_enable=True)
+        return News.objects.filter()
