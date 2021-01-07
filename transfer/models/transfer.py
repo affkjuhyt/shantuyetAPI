@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__.split('.')[0])
 
 class Transfer(BaseModel):
     WAIT_OWNER_AGREE = 'wait_owner_agree'
-    WAIT_GOVERNMENT_AGREE = 'wait_government_agree'
+    WAIT_GOVERNMENT_AGREE = 'government_agree'
     APPROVED = 'approved'
     REJECT = 'reject'
 
@@ -28,4 +28,4 @@ class Transfer(BaseModel):
                                         related_name="secondary_owner")
     name = models.CharField(max_length=1000, null=True)
     date = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=40, choices=TRANSFER_STATUS, default=WAIT_OWNER_AGREE)
+    status = models.CharField(max_length=20, choices=TRANSFER_STATUS, default=WAIT_OWNER_AGREE)
