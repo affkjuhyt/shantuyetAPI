@@ -12,6 +12,7 @@ from root.authentications import BaseUserJWTAuthentication
 from transfer.models import Transfer
 from transfer.serializers import TransferSerializer
 from userprofile.models import UserProfile, SecondaryOwner
+from userprofile.permissions import OwnerOnly
 
 logger = logging.getLogger(__name__.split('.')[0])
 
@@ -35,7 +36,7 @@ class TransferAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.L
     def get_queryset(self):
         return Transfer.objects.filter()
 
-    @action(detail=False, methods=['post'], url_path='accept-requests')
+    @action(detail=False, methods=['post'], url_path='accept-requests', permission_classes=[OwnerOnly])
     def post_approved_request(self, request, *args, **kwargs):
 
         try:
