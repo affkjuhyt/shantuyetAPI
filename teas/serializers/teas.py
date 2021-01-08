@@ -32,10 +32,10 @@ class TeasSerializer(serializers.ModelSerializer):
                 response['secondary_owner_adrress'] = secondary_owner.address
                 response['tea_status'] = transfer.status
         else:
-            response['secondary_owner_name'] = ""
-            response['secondary_owner_phone'] = ""
-            response['secondary_owner_email'] = ""
-            response['secondary_owner_adrress'] = ""
-            response['tea_status'] = ""
+            response['secondary_owner_name'] = None
+            response['secondary_owner_phone'] = None
+            response['secondary_owner_email'] = None
+            response['secondary_owner_adrress'] = None
+            response['tea_status'] = None
 
         return response
