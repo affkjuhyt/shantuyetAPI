@@ -11,6 +11,7 @@ from root.authentications import BaseUserJWTAuthentication
 from teas.models import Teas
 from teas.serializers import TeasSerializer
 from transfer.models import Transfer
+from transfer.serializers import TransferSerializer
 from userprofile.models import SecondaryOwner
 from userprofile.serializers import SecondaryOwnerSerializer
 
@@ -42,4 +43,12 @@ class SecondaryOwnerAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, gene
         teas = Teas.objects.filter(id__in=tea_ids)
         serializer = TeasSerializer(teas, many=True)
 
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['get'], url_path='manager_transfer', serializer_class=TransferSerializer)
+    def get_transfer(self, request, *args, **kwargs):
+        secondary_owner = SecondaryOwner.objects.filter(user_id=request.user.id).first()
+        transfer = Transfer.objects.filter(secondary_owner=secondary_owner)
+
+        serializer = TransferSerializer(transfer, many=True)
         return Response(serializer.data)
