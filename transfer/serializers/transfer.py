@@ -19,5 +19,7 @@ class TransferSerializer(serializers.ModelSerializer):
         response['secondary_owner_name'] = instance.secondary_owner.fullname
         response['tree_area'] = instance.tea.tree_area
         response['owner_name'] = instance.owner.fullname
+        response['secondary_owner_address'] = instance.secondary_owner.address
+        response['secondary_owner_phone'] = instance.secondary_owner.phone_number
 
         return response
