@@ -43,8 +43,7 @@ class TeasView(ReadOnlyModelViewSet):
     @action(detail=True, methods=['get'], url_path='info_secondary_owner', serializer_class=OwnerSerializer)
     def get_info_secondary_owner(self, *args, **kwargs):
         tea = self.get_object()
-        transfer_ids = Transfer.objects.filter(tea=tea, status='wait_owner_agree').values_list('secondary_owner_id',
-                                                                                               flat=True)
+        transfer_ids = Transfer.objects.filter(tea=tea).exclude(status='reject').values_list('secondary_owner_id', flat=True)
         if len(transfer_ids) == 0:
             return Response({"message": "Khong co chu so huu thu cap"})
 
