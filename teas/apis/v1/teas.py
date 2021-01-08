@@ -67,6 +67,14 @@ class TeasView(ReadOnlyModelViewSet):
 
         return Response(transfer)
 
+    @action(detail=True, methods=['get'], url_path='list_request', serializer_class=TransferSerializer)
+    def get_list_request(self, *args, **kwargs):
+        tea = self.get_object()
+        transfer = Transfer.objects.select_related('tea').filter(tea=tea, status='wait_owner_agree')
+        transfer = TransferSerializer(transfer, many=True).data
+
+        return Response(transfer)
+
 
 class TeasAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListCreateAPIView):
     serializer_class = TeasSerializer
