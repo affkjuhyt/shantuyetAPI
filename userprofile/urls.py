@@ -12,9 +12,9 @@ public_router.register(
 )
 
 public_router.register(
-    r'secondary-owner',
+    r'secondary_owner',
     SecondaryOwnerPublicView,
-    basename='v1-secondary-owner'
+    basename='v1-secondary_owner'
 )
 
 userprofile_public_urlpatterns = public_router.urls
@@ -34,9 +34,9 @@ admin_router.register(
 )
 
 admin_router.register(
-    r'secondary-owners',
+    r'secondary_owners',
     SecondaryOwnerAdminView,
-    basename='v1-secondary-owner'
+    basename='v1-secondary_owner'
 )
 
 admin_router.register(
