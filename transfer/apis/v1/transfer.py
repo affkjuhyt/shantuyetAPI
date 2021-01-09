@@ -36,7 +36,7 @@ class TransferAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.L
     def get_queryset(self):
         return Transfer.objects.filter()
 
-    @action(detail=False, methods=['post'], url_path='accept-requests', permission_classes=[OwnerOnly])
+    @action(detail=False, methods=['post'], url_path='accept_requests', permission_classes=[OwnerOnly])
     def post_approved_request(self, request, *args, **kwargs):
 
         try:
@@ -54,7 +54,7 @@ class TransferAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.L
         except ValidationError:
             return Response('Error when agreeing to transfer!')
 
-    @action(detail=False, methods=['post'], url_path='reject-requests', permission_classes=[OwnerOnly])
+    @action(detail=False, methods=['post'], url_path='reject_requests', permission_classes=[OwnerOnly])
     def post_approved_request(self, request, *args, **kwargs):
 
         try:
