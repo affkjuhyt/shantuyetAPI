@@ -53,3 +53,17 @@ class TransferAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.L
             return Response('Approved register transfer successfully!')
         except ValidationError:
             return Response('Error when agreeing to transfer!')
+
+    @action(detail=False, methods=['post'], url_path='reject-requests', permission_classes=[OwnerOnly])
+    def post_approved_request(self, request, *args, **kwargs):
+
+        try:
+            tea = request.data['tea']
+            secondary_owner = request.data['secondary_owner']
+            transfer = Transfer.objects.filter(tea=tea, secondary_owner=secondary_owner).first()
+            transfer.status = 'reject'
+            transfer.save()
+
+            return Response('Reject register transfer successfully!')
+        except ValidationError:
+            return Response('Error when reject to transfer!')
