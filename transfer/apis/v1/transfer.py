@@ -55,7 +55,7 @@ class TransferAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.L
             return Response('Error when agreeing to transfer!')
 
     @action(detail=False, methods=['post'], url_path='reject_requests', permission_classes=[OwnerOnly])
-    def post_approved_request(self, request, *args, **kwargs):
+    def post_reject_request(self, request, *args, **kwargs):
 
         try:
             tea = request.data['tea']
