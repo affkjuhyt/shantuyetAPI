@@ -66,7 +66,7 @@ class FacebookView(APIView):
         user_info_response = json.loads(user_info_request.text)
 
         try:
-            user = User.objects.get(email=user_info_response["id"])
+            user = User.objects.get(username=user_info_response["id"])
         except User.DoesNotExist:
             user = User()
             user.username = user_info_response["id"]
