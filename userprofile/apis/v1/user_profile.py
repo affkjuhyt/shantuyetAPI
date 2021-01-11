@@ -40,11 +40,12 @@ class UpdateInfo(ReadOnlyModelViewSet):
 
         username = request.data['username']
         password = request.data['password']
-        user = User.objects.filter(id=request.user.id).first()
 
+        username = username.lower()
         if User.objects.filter(username=username).exists():
             return Response({'Error': 'Username already exists'})
         else:
+            user = User.objects.filter(id=request.user.id).first()
             user.username = username
             try:
                 validate_password(password, user=user)
