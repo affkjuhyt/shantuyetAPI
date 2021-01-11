@@ -23,7 +23,7 @@ class UserPublicView(ReadOnlyModelViewSet):
     parser_classes = [JSONParser, MultiPartParser, FormParser]
 
     def get_queryset(self):
-        return UserProfile.objects.filter(user_id=self.request.user).all()
+        return UserProfile.objects.filter(user_id=self.request.user.id).all()
 
     def list(self, request, *args, **kwargs):
         user_profile = self.get_queryset().first()
