@@ -15,3 +15,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
                   'user_type', 'id_card', 'is_deleted', 'permanent_residence', 'issued_by', 'issued_date', 'province',
                   'district', 'sub_district', 'street']
         read_only_fields = ['id']
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        response['user_id'] = instance.user.id
+
+        return response
