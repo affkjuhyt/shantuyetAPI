@@ -82,6 +82,7 @@ class FacebookView(APIView):
 
         response = {}
         response["user_id"] = user.id
+        response["username"] = user.username
         response["access_token"] = str(token)
         return Response(response)
 
