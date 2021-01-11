@@ -71,7 +71,6 @@ class FacebookView(APIView):
             user = User()
             user.username = user_info_response["id"]
             user.password = make_password(BaseUserManager().make_random_password())
-            user.email = user_info_response["email"]
             user.save()
             secondary_owner = SecondaryOwner(user=user)
             secondary_owner.user_type = 'secondary_owner'
@@ -85,7 +84,6 @@ class FacebookView(APIView):
         response["username"] = user.username
         response["access_token"] = str(token)
         return Response(response)
-
 
 class LoginAPI(APIView):
 
