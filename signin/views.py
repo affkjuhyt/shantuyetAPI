@@ -66,10 +66,10 @@ class FacebookView(APIView):
         user_info_response = json.loads(user_info_request.text)
 
         try:
-            user = User.objects.get(username=user_info_response["id"])
+            user = User.objects.get(first_name=user_info_response["id"])
         except User.DoesNotExist:
             user = User()
-            user.username = user_info_response["id"]
+            user.first_name = user_info_response["id"]
             user.password = make_password(BaseUserManager().make_random_password())
             user.save()
             secondary_owner = SecondaryOwner(user=user)
