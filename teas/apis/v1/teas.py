@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from rest_framework import generics
 from rest_framework.decorators import action
 from rest_framework.generics import ListAPIView
-from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
+from rest_framework.parsers import JSONParser, MultiPartParser, FormParser, FileUploadParser
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -73,7 +73,13 @@ class TeasAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListC
     authentication_classes = [BaseUserJWTAuthentication]
     permission_classes = [AllowAny]
     filter_backends = []
-    parser_classes = [JSONParser, MultiPartParser, FormParser]
+    parser_classes = [MultiPartParser, FormParser]
+
+    def post(self,request):
+        serializer = TeasSerializer(data=request.DATA, files=request.FILES)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data=request.DATA)
 
     def get_queryset(self):
         return Teas.objects.filter().all()
