@@ -1,10 +1,8 @@
 import logging
 
-from django.http import JsonResponse
 from rest_framework import generics
 from rest_framework.decorators import action
-from rest_framework.generics import ListAPIView
-from rest_framework.parsers import JSONParser, MultiPartParser, FormParser, FileUploadParser
+from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -12,13 +10,13 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from root.authentications import BaseUserJWTAuthentication
 from transfer.models import Transfer
 from transfer.serializers import TransferSerializer
-from userprofile.models import Owner, SecondaryOwner, UserProfile
+from userprofile.models import Owner, SecondaryOwner
 from rest_framework.viewsets import ReadOnlyModelViewSet, ViewSetMixin
 
 from teas.models import Teas
 from teas.serializers import TeasSerializer
 from userprofile.permissions import SecondaryOwnerOnly
-from userprofile.serializers import OwnerSerializer, SecondaryOwnerSerializer, UserProfileSerializer
+from userprofile.serializers import OwnerSerializer, SecondaryOwnerSerializer
 
 logger = logging.getLogger(__name__.split('.')[0])
 
@@ -98,11 +96,15 @@ class TeasAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListC
         tea = self.get_object()
         owner = Owner.objects.filter(teas=tea).first()
         secondary_owner = SecondaryOwner.objects.filter(user_id=request.user.id).first()
-        Transfer.objects.create(tea=tea,
-                                owner=owner,
-                                secondary_owner=secondary_owner)
+        try:
+            transfer = Transfer.objects.get(secondary_owner=secondary_owner, tea=tea)
+            return Response('A transfer already exists!')
+        except transfer.DoesNotExist:
+            Transfer.objects.create(tea=tea,
+                                    owner=owner,
+                                    secondary_owner=secondary_owner)
 
-        return Response('Register transfer is successfully.')
+            return Response('Register transfer is successfully.')
 
     @action(detail=True, methods=['get'], url_path='list_request', serializer_class=TransferSerializer)
     def get_list_request(self, *args, **kwargs):

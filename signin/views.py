@@ -4,16 +4,13 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 
-from rest_framework import status, generics, permissions, response
-from rest_framework.authtoken.serializers import AuthTokenSerializer
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.utils import json
 from rest_framework.views import APIView
 from rest_framework_jwt.settings import api_settings
 
-from root import settings
-from userprofile.models import UserProfile, SecondaryOwner
+from userprofile.models import SecondaryOwner
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
