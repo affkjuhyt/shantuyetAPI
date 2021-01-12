@@ -42,3 +42,12 @@ class TeasSerializer(serializers.ModelSerializer):
                 response['tea_status'] = None
 
         return response
+
+    def validate(self, data):
+        lat = data['lat']
+        lon = data['lon']
+        if(0 > lat or lat > 90):
+            raise serializers.ValidationError("Error")
+        if(0 > lon or lon > 90):
+            raise serializers.ValidationError("Error")
+        return data
