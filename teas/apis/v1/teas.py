@@ -1,6 +1,6 @@
 import logging
 
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.decorators import action
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import AllowAny
@@ -98,13 +98,13 @@ class TeasAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListC
         secondary_owner = SecondaryOwner.objects.filter(user_id=request.user.id).first()
         transfer = Transfer.objects.filter(tea=tea, secondary_owner=secondary_owner)
         if len(transfer) != 0:
-            return Response('Assignment already exists')
+            return Response('Assignment already exists', status=status.HTTP_400_BAD_REQUEST)
         else:
             Transfer.objects.create(tea=tea,
                                     owner=owner,
                                     secondary_owner=secondary_owner)
 
-            return Response('Register transfer is successfully.')
+            return Response('Register transfer is successfully.', status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['get'], url_path='list_request', serializer_class=TransferSerializer)
     def get_list_request(self, *args, **kwargs):
