@@ -31,7 +31,13 @@ class SecondaryOwnerAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, gene
     serializer_class = SecondaryOwnerSerializer
     authentication_classes = [BaseUserJWTAuthentication]
     permission_classes = [AllowAny]
-    parser_classes = [JSONParser, MultiPartParser, FormParser]
+    parser_classes = [MultiPartParser, FormParser]
+
+    def post(self,request):
+        serializer = SecondaryOwnerSerializer(data=request.DATA, files=request.FILES)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data=request.DATA)
 
     def get_queryset(self):
         return SecondaryOwner.objects.filter()
