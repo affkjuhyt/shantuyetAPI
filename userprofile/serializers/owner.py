@@ -12,5 +12,5 @@ class OwnerSerializer(serializers.ModelSerializer):
         model = Owner
         fields = ['id', 'user', 'fullname', 'phone_number', 'email', 'dob', 'gender', 'address',
                   'user_type', 'id_card', 'is_deleted', 'permanent_residence', 'issued_by', 'issued_date', 'province',
-                  'district', 'sub_district', 'street']
+                  'district', 'sub_district', 'street', 'front_view_photo', 'back_view_photo']
         read_only_fields = ['id']

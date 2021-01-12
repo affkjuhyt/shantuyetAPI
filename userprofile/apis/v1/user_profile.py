@@ -33,6 +33,7 @@ class UserPublicView(ReadOnlyModelViewSet):
 
 class UpdateInfo(ReadOnlyModelViewSet):
     authentication_classes = [BaseUserJWTAuthentication]
+    serializer_class = UserProfileSerializer
 
     def post(self, request, *args, **kwargs):
         if not request.data:

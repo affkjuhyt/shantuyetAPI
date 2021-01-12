@@ -17,25 +17,26 @@ class TeasSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         response = super().to_representation(instance)
 
-        response['owner_name'] = instance.owner.fullname
-        response['owner_phone'] = instance.owner.phone_number
-        response['owner_email'] = instance.owner.email
-        response['owner_address'] = instance.owner.address
+        if instance.owner is not None:
+            response['owner_name'] = instance.owner.fullname
+            response['owner_phone'] = instance.owner.phone_number
+            response['owner_email'] = instance.owner.email
+            response['owner_address'] = instance.owner.address
 
-        transfers = Transfer.objects.filter(tea=instance.id)
-        if len(transfers) > 0:
-            for transfer in transfers:
-                secondary_owner = transfer.secondary_owner
-                response['secondary_owner_name'] = secondary_owner.fullname
-                response['secondary_owner_phone'] = secondary_owner.phone_number
-                response['secondary_owner_email'] = secondary_owner.email
-                response['secondary_owner_adrress'] = secondary_owner.address
-                response['tea_status'] = transfer.status
-        else:
-            response['secondary_owner_name'] = None
-            response['secondary_owner_phone'] = None
-            response['secondary_owner_email'] = None
-            response['secondary_owner_adrress'] = None
-            response['tea_status'] = None
+            transfers = Transfer.objects.filter(tea=instance.id)
+            if len(transfers) > 0:
+                for transfer in transfers:
+                    secondary_owner = transfer.secondary_owner
+                    response['secondary_owner_name'] = secondary_owner.fullname
+                    response['secondary_owner_phone'] = secondary_owner.phone_number
+                    response['secondary_owner_email'] = secondary_owner.email
+                    response['secondary_owner_adrress'] = secondary_owner.address
+                    response['tea_status'] = transfer.status
+            else:
+                response['secondary_owner_name'] = None
+                response['secondary_owner_phone'] = None
+                response['secondary_owner_email'] = None
+                response['secondary_owner_adrress'] = None
+                response['tea_status'] = None
 
         return response
