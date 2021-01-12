@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
+from django.conf.urls.i18n import i18n_patterns
 
 from news.urls import news_public_urlpatterns, news_urlpatterns
 from teas.urls import teas_public_urlpatterns, teas_urlpatterns
@@ -23,7 +24,7 @@ external_public_urlpatterns = news_public_urlpatterns + teas_public_urlpatterns 
                               transfer_public_urlpatterns
 external_urlpatterns = news_urlpatterns + userprofile_urlpatterns + teas_urlpatterns + transfer_urlpatterns
 
-urlpatterns = [
+urlpatterns = (
     path('admin/', admin.site.urls),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
@@ -32,4 +33,4 @@ urlpatterns = [
     path('signingg/', views.GoogleView.as_view(), name='signin-gg'),
     path('signinfb/', views.FacebookView.as_view(), name='signin-fb'),
     path('api/login/', views.LoginAPI.as_view(), name='login'),
-]
+)

@@ -36,6 +36,7 @@ else:
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -91,8 +92,9 @@ AUTH_USER_MODEL = 'auth.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
+from django.utils.translation import gettext_lazy as _
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'vi-VI'
 
 TIME_ZONE = 'UTC'
 
@@ -101,6 +103,21 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+LOCALE_PATHS = (
+   os.path.join(BASE_DIR, 'locale'),
+   os.path.join(BASE_DIR, 'polls/locale')
+)
+
+LANGUAGES = (
+    ('vi', _('Vietnamese')),
+    ('en', _('English')),
+)
+
+MULTILINGUAL_LANGUAGES = (
+    "en-us",
+    "vi",
+)
 
 AUTH_KEYS_DIR = '%s/root/settings/auth_key' % BASE_DIR
 
