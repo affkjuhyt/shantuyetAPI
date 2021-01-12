@@ -96,15 +96,11 @@ class TeasAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListC
         tea = self.get_object()
         owner = Owner.objects.filter(teas=tea).first()
         secondary_owner = SecondaryOwner.objects.filter(user_id=request.user.id).first()
-        try:
-            transfer = Transfer.objects.get(secondary_owner=secondary_owner, tea=tea)
-            return Response('A transfer already exists!')
-        except transfer.DoesNotExist:
-            Transfer.objects.create(tea=tea,
-                                    owner=owner,
-                                    secondary_owner=secondary_owner)
+        Transfer.objects.create(tea=tea,
+                                owner=owner,
+                                secondary_owner=secondary_owner)
 
-            return Response('Register transfer is successfully.')
+        return Response('Register transfer is successfully.')
 
     @action(detail=True, methods=['get'], url_path='list_request', serializer_class=TransferSerializer)
     def get_list_request(self, *args, **kwargs):
