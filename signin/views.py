@@ -3,7 +3,6 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
-
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.utils import json
@@ -82,6 +81,34 @@ class FacebookView(APIView):
         response["access_token"] = str(token)
         return Response(response)
 
+
+class AppleView(APIView):
+    def post(self, request):
+        user_name = request.data.get("full_name")
+        email = request.data.get("email")
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            user = User()
+            user.email = email
+            user.username = user_name
+            user.password = make_password(BaseUserManager().make_random_password())
+            user.save()
+            secondary_owner = SecondaryOwner(user=user)
+            secondary_owner.user_type = 'secondary_owner'
+            secondary_owner.save()
+
+        payload = jwt_payload_handler(user)
+        token = jwt_encode_handler(payload)
+
+        response = {}
+        response["user_id"] = user.id
+        response["username"] = user.username
+        response["access_token"] = str(token)
+        return Response(response)
+
+
 class LoginAPI(APIView):
 
     def post(self, request):
@@ -100,7 +127,7 @@ class LoginAPI(APIView):
             payload = jwt_payload_handler(user)
             jwt_token = jwt_encode_handler(payload)
 
-            response={}
+            response = {}
             response["username"] = user.username
             response["access_token"] = jwt_token
 

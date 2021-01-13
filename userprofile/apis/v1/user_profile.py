@@ -1,12 +1,12 @@
 import logging
 
+from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
-from rest_framework import status, generics
+from django.core.exceptions import ValidationError
+from rest_framework import status
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.response import Response
-from rest_framework.viewsets import GenericViewSet, ReadOnlyModelViewSet, ViewSetMixin
-from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
+from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_registration.exceptions import BadRequest
 
 from root.authentications import BaseUserJWTAuthentication

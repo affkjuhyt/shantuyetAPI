@@ -32,5 +32,6 @@ urlpatterns = (
     path('v1/', include(external_urlpatterns)),
     path('signingg/', views.GoogleView.as_view(), name='signin-gg'),
     path('signinfb/', views.FacebookView.as_view(), name='signin-fb'),
+    path('signinapple/', views.AppleView.as_view(), name='signin-apple'),
     path('api/login/', views.LoginAPI.as_view(), name='login'),
 )
