@@ -4,7 +4,6 @@ from rest_framework import serializers
 
 from teas.models import Teas
 from transfer.models import Transfer
-from django.utils.translation import gettext_lazy as _
 
 logger = logging.getLogger(__name__)
 
@@ -12,13 +11,11 @@ logger = logging.getLogger(__name__)
 class TeasSerializer(serializers.ModelSerializer):
     class Meta:
         model = Teas
-        fields = ['id', 'owner', 'name', 'age', 'diameter', 'lat', 'lon', 'height','tree_area',
+        fields = ['id', 'owner', 'name', 'age', 'diameter', 'lat', 'lon', 'height', 'tree_area',
                   'image1', 'image2', 'image3', 'image4']
-        verbose_name = _("Teas")
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
-
         if instance.owner is not None:
             response['owner_name'] = instance.owner.fullname
             response['owner_phone'] = instance.owner.phone_number
@@ -46,8 +43,7 @@ class TeasSerializer(serializers.ModelSerializer):
     def validate(self, data):
         lat = data['lat']
         lon = data['lon']
-        if(0 > lat or lat > 90):
+        if ((0 < lat < 90) and (0 < lon < 90)):
+            return data
+        else:
             raise serializers.ValidationError("Error")
-        if(0 > lon or lon > 90):
-            raise serializers.ValidationError("Error")
-        return data

@@ -24,6 +24,7 @@ class NewsView(ReadOnlyModelViewSet):
     def get_queryset(self):
         return News.objects.filter(is_enable=True).order_by('-date_added')
 
+
 class NewsAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListCreateAPIView):
     serializer_class = NewsSerializer
     authentication_classes = [BaseUserJWTAuthentication]
