@@ -8,6 +8,10 @@ from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_registration.exceptions import BadRequest
+from rest_framework_jwt.settings import api_settings
+
+jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
 from root.authentications import BaseUserJWTAuthentication
 from userprofile.models import UserProfile, SecondaryOwner
@@ -60,4 +64,11 @@ class UpdateInfo(ReadOnlyModelViewSet):
             secondary_owner.fullname = user.username
             secondary_owner.save()
 
-            return Response({'Success': 'Create user successfully'})
+            if user:
+                payload = jwt_payload_handler(user)
+                jwt_token = jwt_encode_handler(payload)
+
+                response = {}
+                response["access_token"] = jwt_token
+
+            return Response(response, status=status.HTTP_200_OK)
