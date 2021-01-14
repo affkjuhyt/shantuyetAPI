@@ -94,6 +94,7 @@ class AppleView(APIView):
             user.password = make_password(BaseUserManager().make_random_password())
             user.save()
             secondary_owner = SecondaryOwner(user=user)
+            secondary_owner.fullname = user.username
             secondary_owner.user_type = 'secondary_owner'
             secondary_owner.save()
 
