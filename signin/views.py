@@ -84,14 +84,12 @@ class FacebookView(APIView):
 
 class AppleView(APIView):
     def post(self, request):
-        user_name = request.data.get("full_name")
-        email = request.data.get("email")
+        user_name = request.data.get("user_id")
 
         try:
-            user = User.objects.get(email=email)
+            user = User.objects.get(username=user_name)
         except User.DoesNotExist:
             user = User()
-            user.email = email
             user.username = user_name
             user.password = make_password(BaseUserManager().make_random_password())
             user.save()
@@ -104,7 +102,6 @@ class AppleView(APIView):
 
         response = {}
         response["user_id"] = user.id
-        response["username"] = user.username
         response["access_token"] = str(token)
         return Response(response)
 
