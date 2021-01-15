@@ -94,6 +94,7 @@ class AppleView(APIView):
             user = User.objects.get(username=user_name)
         except User.DoesNotExist:
             user = User()
+            breakpoint()
             user.username = user_name
             user.password = make_password(BaseUserManager().make_random_password())
             user.save()
