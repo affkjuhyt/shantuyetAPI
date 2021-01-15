@@ -32,7 +32,7 @@ class UserProfile(BaseUserModel):
         (FEMALE, 'Female')
     )
 
-    fullname = models.CharField(max_length=30)
+    fullname = models.CharField(max_length=50)
     phone_number = models.CharField(max_length=20, null=True, blank=True)
     email = models.CharField(max_length=30, null=False, blank=False)
     gender = models.CharField(max_length=20,choices=GENDER, default=MALE)
