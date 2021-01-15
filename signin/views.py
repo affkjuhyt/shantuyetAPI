@@ -46,6 +46,7 @@ class GoogleView(APIView):
 
         response = {}
         response['username'] = user.username
+        # response['photo_url'] = payl
         response['access_token'] = str(token)
         return Response(response)
 
@@ -84,12 +85,16 @@ class FacebookView(APIView):
 
 class AppleView(APIView):
     def post(self, request):
+        if not request.data:
+            return Response({'Error': "Please provide user_id"}, status=status.HTTP_400_BAD_REQUEST)
+
         user_name = request.data.get("user_id")
 
         try:
             user = User.objects.get(username=user_name)
         except User.DoesNotExist:
             user = User()
+            breakpoint()
             user.username = user_name
             user.password = make_password(BaseUserManager().make_random_password())
             user.save()
@@ -104,7 +109,7 @@ class AppleView(APIView):
         response = {}
         response["user_id"] = user.id
         response["access_token"] = str(token)
-        return Response(response)
+        return Response(response, status=status.HTTP_200_OK)
 
 
 class LoginAPI(APIView):
