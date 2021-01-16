@@ -19,4 +19,5 @@ INSTALLED_APPS = [
     'userprofile',
     'transfer',
     'signin',
+    'treearea',
 ]

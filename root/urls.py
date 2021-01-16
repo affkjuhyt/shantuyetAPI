@@ -6,6 +6,7 @@ from django.conf.urls.i18n import i18n_patterns
 
 from news.urls import news_public_urlpatterns, news_urlpatterns
 from teas.urls import teas_public_urlpatterns, teas_urlpatterns
+from treearea.urls import tree_area_public_urlpatterns
 from userprofile.urls import userprofile_public_urlpatterns, userprofile_urlpatterns
 from transfer.urls import transfer_public_urlpatterns, transfer_urlpatterns
 from signin import views
@@ -21,7 +22,7 @@ schema_view = get_schema_view(
 )
 
 external_public_urlpatterns = news_public_urlpatterns + teas_public_urlpatterns + userprofile_public_urlpatterns + \
-                              transfer_public_urlpatterns
+                              transfer_public_urlpatterns + tree_area_public_urlpatterns
 external_urlpatterns = news_urlpatterns + userprofile_urlpatterns + teas_urlpatterns + transfer_urlpatterns
 
 urlpatterns = (
