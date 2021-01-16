@@ -18,4 +18,10 @@ class TreeAreaSerializer(serializers.ModelSerializer):
         response = super().to_representation(instance)
         response['number_tea'] = Teas.objects.filter(tree_area=instance.id).count()
 
+        location = {}
+        teas = Teas.objects.filter(tree_area=instance.id)
+        for index, tea in enumerate(teas):
+            location['lat '+str(index)] = tea.lat
+            location['lon '+str(index)] = tea.lon
+        response['location']= location
         return response
