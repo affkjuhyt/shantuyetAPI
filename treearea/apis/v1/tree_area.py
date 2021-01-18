@@ -28,3 +28,4 @@ class TreeAreaPublicView(ReadOnlyModelViewSet):
         tea = Teas.objects.filter(tree_area=tree_area)
         serializer = TeasSerializer(tea, many=True)
         return Response(serializer.data)
+

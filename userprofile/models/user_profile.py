@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__.split('.')[0])
 class UserProfile(BaseUserModel):
     OWNER = 'owner'
     SECONDARY_OWNER = 'secondary_owner'
+    GOVERNMENT = 'government'
     PROCESSING = 'processing'
     APPROVED = 'approved'
     REJECT = 'reject'
@@ -18,7 +19,8 @@ class UserProfile(BaseUserModel):
 
     USERTYPE = (
         (OWNER, 'Owner'),
-        (SECONDARY_OWNER, 'SecondaryOwner')
+        (SECONDARY_OWNER, 'SecondaryOwner'),
+        (GOVERNMENT, 'Government')
     )
 
     STATUS = (
