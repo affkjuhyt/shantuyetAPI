@@ -40,7 +40,7 @@ admin_router.register(
 )
 
 admin_router.register(
-    r'governments',
+    r'government',
     GovernmentAdminView,
     basename='v1-government'
 )
