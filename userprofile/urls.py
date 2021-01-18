@@ -17,12 +17,6 @@ public_router.register(
     basename='v1-secondary_owner'
 )
 
-public_router.register(
-    r'government',
-    GovernmentPublicView,
-    basename='v1-government'
-)
-
 userprofile_public_urlpatterns = public_router.urls
 
 admin_router = ExtendedSimpleRouter()
