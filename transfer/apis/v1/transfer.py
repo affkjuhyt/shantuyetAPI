@@ -73,3 +73,15 @@ class TransferAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.L
         transfer = TransferSerializer(transfers, many=True).data
 
         return Response(transfer)
+
+    @action(detail=False, methods=['post'], url_path='approve_request_government', serializer_class=TransferSerializer)
+    def get_transfer_government(self, request, *args, **kwargs):
+        try:
+            transfer_id = request.data['transfer']
+            transfer = Transfer.objects.filter(id=transfer_id).first()
+            transfer.status = 'approved'
+            transfer.save()
+
+            return Response('Approve transfer successfully!')
+        except ValidationError:
+            return Response('Error when approved request')
