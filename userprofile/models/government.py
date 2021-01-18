@@ -8,4 +8,4 @@ logger = logging.getLogger(__name__.split('.')[0])
 
 
 class Government(UserProfile):
-    is_enable = models.BooleanField(default=True)
+    is_enable = models.BooleanField(default=False)
