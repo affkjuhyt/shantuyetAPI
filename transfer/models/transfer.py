@@ -29,3 +29,6 @@ class Transfer(BaseModel):
     name = models.CharField(max_length=1000, null=True)
     date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=TRANSFER_STATUS, default=WAIT_OWNER_AGREE)
+
+    def __str__(self):
+        return "%s" % self.name

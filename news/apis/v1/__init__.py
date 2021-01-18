@@ -1,1 +1,1 @@
-from .news import NewsView, NewsAdminView
+from .news import NewsView

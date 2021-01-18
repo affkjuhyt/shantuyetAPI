@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from root.authentications import BaseUserJWTAuthentication
 from transfer.models import Transfer
 from transfer.serializers import TransferSerializer
-from userprofile.permissions import OwnerOnly
+from userprofile.permissions import OwnerOnly, Government
 
 logger = logging.getLogger(__name__.split('.')[0])
 
@@ -66,3 +66,10 @@ class TransferAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.L
             return Response('Reject register transfer successfully!')
         except ValidationError:
             return Response('Error when reject to transfer!')
+
+    @action(detail=False, methods=['get'], url_path='get_transfer_wait_government', serializer_class=TransferSerializer)
+    def get_transfer_government(self, *args, **kwargs):
+        transfers = Transfer.objects.filter(status='government_agree')
+        transfer = TransferSerializer(transfers, many=True).data
+
+        return Response(transfer)

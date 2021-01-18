@@ -1,10 +1,9 @@
 import logging
 
-from django.db.models import F
 from rest_framework import serializers
 
 from transfer.models import Transfer
-from userprofile.models import SecondaryOwner
+from treearea.models import TreeArea
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +18,11 @@ class TransferSerializer(serializers.ModelSerializer):
         secondary_owner = instance.secondary_owner
 
         response['secondary_owner_name'] = secondary_owner.fullname
-        response['tree_area'] = instance.tea.tree_area
+        tree_area = TreeArea.objects.filter(teas=instance.tea.id).first()
+        if tree_area is not None:
+            response['tree_area'] = tree_area.name
+        else:
+            response['tree_area'] = ""
         response['owner_name'] = instance.owner.fullname
         response['secondary_owner_address'] = secondary_owner.address
         response['secondary_owner_phone'] = secondary_owner.phone_number
