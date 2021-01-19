@@ -58,3 +58,17 @@ class SecondaryOwnerAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, gene
 
         serializer = TransferSerializer(transfer, many=True)
         return Response(serializer.data)
+
+    @action(detail=False, methods=['post'], url_path='secondary_owner_list_teas', serializer_class=TeasSerializer)
+    def get_secondary_owner_teas(self, request, **kwargs):
+        secondary_owner_id = int(request.data['secondary_owner_id'])
+        secondary_owner = SecondaryOwner.objects.filter(id=secondary_owner_id)
+        if len(secondary_owner) != 0:
+            secondary_owner = secondary_owner.first()
+            tea_ids = Transfer.objects.filter(secondary_owner=secondary_owner.id).values_list('tea_id', flat=True)
+            teas = Teas.objects.filter(id__in=tea_ids)
+            serializer = TeasSerializer(teas, many=True)
+
+            return Response(serializer.data)
+
+        return Response(status=status.HTTP_400_BAD_REQUEST)
