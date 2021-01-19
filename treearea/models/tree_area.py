@@ -10,6 +10,7 @@ class TreeArea(models.Model):
     acreage = models.FloatField(max_length=20, null=True, blank=True)
     number_tea = models.IntegerField(blank=True, null=True)
     content = models.CharField(max_length=2000, null=True, blank=True)
+    image = models.ImageField(upload_to="tree_area/%Y/%m/%d", null=True, blank=True)
 
     def __str__(self):
         return "%s" % self.name
