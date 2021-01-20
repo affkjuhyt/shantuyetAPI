@@ -1,6 +1,6 @@
 import logging
 
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.decorators import action
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import AllowAny
@@ -60,7 +60,7 @@ class SecondaryOwnerAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, gene
         return Response(serializer.data)
 
     @action(detail=False, methods=['post'], url_path='secondary_owner_list_teas', serializer_class=TeasSerializer)
-    def get_secondary_owner_teas(self, request, **kwargs):
+    def get_secondary_owner_list_teas(self, request, **kwargs):
         secondary_owner_id = int(request.data['secondary_owner_id'])
         secondary_owner = SecondaryOwner.objects.filter(id=secondary_owner_id)
         if len(secondary_owner) != 0:

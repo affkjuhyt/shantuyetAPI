@@ -57,16 +57,8 @@ class OwnerAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.List
         serializer = TransferSerializer(transfer, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, methods=['get'], url_path='owner_list_teas', serializer_class=TeasSerializer)
-    def get_owner_tea(self, request, *args, **kwargs):
-        owner_id = request.data['owner_id']
-        owner = Owner.objects.filter(id=owner_id).first()
-        teas = Teas.objects.filter(owner=owner)
-        serializer = TeasSerializer(teas, many=True)
-        return Response(serializer.data)
-
     @action(detail=False, methods=['post'], url_path='owner_list_teas', serializer_class=TeasSerializer)
-    def get_owner_tea(self, request, *args, **kwargs):
+    def get_owner_list_tea(self, request, *args, **kwargs):
         owner_id = int(request.data['owner_id'])
         owner = Owner.objects.filter(id=owner_id)
         if len(owner) != 0:
