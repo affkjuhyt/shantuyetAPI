@@ -45,8 +45,8 @@ class GoogleView(APIView):
         token = jwt_encode_handler(payload)
 
         response = {}
+        response["user_id"] = user.id
         response['username'] = user.username
-        # response['photo_url'] = payl
         response['access_token'] = str(token)
         return Response(response)
 
