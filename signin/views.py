@@ -30,12 +30,11 @@ class GoogleView(APIView):
             return Response(content)
 
         try:
-            user = User.objects.get(email=data['email'])
+            user = User.objects.get(first_name=data['email'])
         except User.DoesNotExist:
             user = User()
-            user.username = user.username = data['email']
+            user.first_name = data['email']
             user.password = make_password(BaseUserManager().make_random_password())
-            user.email = data['email']
             user.save()
             secondary_owner = SecondaryOwner(user=user)
             secondary_owner.user_type = 'secondary_owner'
