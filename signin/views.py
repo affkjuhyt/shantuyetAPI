@@ -90,14 +90,13 @@ class AppleView(APIView):
         user_name = request.data.get("user_id")
 
         try:
-            user = User.objects.get(username=user_name)
+            user = User.objects.get(first_name=user_name)
         except User.DoesNotExist:
             user = User()
-            user.username = user_name
+            user.first_name = user_name
             user.password = make_password(BaseUserManager().make_random_password())
             user.save()
             secondary_owner = SecondaryOwner(user=user)
-            secondary_owner.fullname = user.username
             secondary_owner.user_type = 'secondary_owner'
             secondary_owner.save()
 
@@ -105,6 +104,7 @@ class AppleView(APIView):
         token = jwt_encode_handler(payload)
 
         response = {}
+        response["username"] = user.username
         response["user_id"] = user.id
         response["access_token"] = str(token)
         return Response(response, status=status.HTTP_200_OK)
