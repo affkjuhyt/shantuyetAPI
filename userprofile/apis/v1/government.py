@@ -1,11 +1,13 @@
 import logging
 
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from teas.serializers import TeasSerializer
+from transfer.models import Transfer
 from treearea.models import TreeArea
 from teas.models import Teas
 from userprofile.models import Owner
@@ -32,7 +34,7 @@ class GovernmentAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics
     serializer_class = GovernmentSerializer
     authentication_classes = [BaseUserJWTAuthentication]
     permission_classes = [AllowAny]
-    parser_classes = [MultiPartParser, FormParser]
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
 
     def get_queryset(self):
         return Government.objects.filter()
@@ -50,3 +52,30 @@ class GovernmentAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics
                                 'number_secondary_owner': number_secondary_owner})
 
         return Response(statistics_data)
+
+    @action(detail=False, methods=['post'], url_path='owner_list_teas', serializer_class=TeasSerializer)
+    def get_owner_list_tea(self, request, *args, **kwargs):
+        owner_id = int(request.data['owner_id'])
+        owner = Owner.objects.filter(id=owner_id)
+        if len(owner) != 0:
+            owner = owner.first()
+            teas = Teas.objects.filter(owner=owner)
+            serializer = TeasSerializer(teas, many=True)
+
+            return Response(serializer.data)
+
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['post'], url_path='secondary_owner_list_teas', serializer_class=TeasSerializer)
+    def get_secondary_owner_list_teas(self, request, **kwargs):
+        secondary_owner_id = int(request.data['secondary_owner_id'])
+        secondary_owner = SecondaryOwner.objects.filter(id=secondary_owner_id)
+        if len(secondary_owner) != 0:
+            secondary_owner = secondary_owner.first()
+            tea_ids = Transfer.objects.filter(secondary_owner=secondary_owner.id).values_list('tea_id', flat=True)
+            teas = Teas.objects.filter(id__in=tea_ids)
+            serializer = TeasSerializer(teas, many=True)
+
+            return Response(serializer.data)
+
+        return Response(status=status.HTTP_400_BAD_REQUEST)
