@@ -31,7 +31,7 @@ class OwnerAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.List
     serializer_class = OwnerSerializer
     authentication_classes = [BaseUserJWTAuthentication]
     permission_classes = [AllowAny]
-    parser_classes = [MultiPartParser, FormParser]
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
 
     def post(self,request):
         serializer = OwnerSerializer(data=request.DATA, files=request.FILES)
@@ -56,16 +56,3 @@ class OwnerAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.List
 
         serializer = TransferSerializer(transfer, many=True)
         return Response(serializer.data)
-
-    @action(detail=False, methods=['post'], url_path='owner_list_teas', serializer_class=TeasSerializer)
-    def get_owner_list_tea(self, request, *args, **kwargs):
-        owner_id = int(request.data['owner_id'])
-        owner = Owner.objects.filter(id=owner_id)
-        if len(owner) != 0:
-            owner = owner.first()
-            teas = Teas.objects.filter(owner=owner)
-            serializer = TeasSerializer(teas, many=True)
-
-            return Response(serializer.data)
-
-        return Response(status=status.HTTP_400_BAD_REQUEST)
