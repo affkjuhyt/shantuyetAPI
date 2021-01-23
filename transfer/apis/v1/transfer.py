@@ -1,5 +1,6 @@
 import logging
 
+from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
@@ -41,7 +42,7 @@ class TransferAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.L
         try:
             tea = request.data['tea']
             secondary_owner = request.data['secondary_owner']
-            transfer = Transfer.objects.filter(tea=tea, secondary_owner=secondary_owner).first()
+            transfer = get_object_or_404(Transfer, tea=tea, secondary_owner=secondary_owner)
             reject_transfers = Transfer.objects.filter(tea=tea).exclude(secondary_owner=secondary_owner)
             transfer.status = 'government_agree'
             for reject_transfer in reject_transfers:
@@ -59,7 +60,7 @@ class TransferAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.L
         try:
             tea = request.data['tea']
             secondary_owner = request.data['secondary_owner']
-            transfer = Transfer.objects.filter(tea=tea, secondary_owner=secondary_owner).first()
+            transfer = get_object_or_404(Transfer, tea=tea, secondary_owner=secondary_owner)
             transfer.status = 'reject'
             transfer.save()
 
