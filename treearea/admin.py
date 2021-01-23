@@ -5,6 +5,7 @@ from treearea.models import TreeArea
 class TreeAreaAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'acreage', 'number_tea', 'content']
     search_fields = ['name']
+    list_filter = ['name']
 
 
 admin.site.register(TreeArea, TreeAreaAdmin)

@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__.split('.')[0])
 class TreeAreaSerializer(serializers.ModelSerializer):
     class Meta:
         model = TreeArea
-        fields = ['id', 'name', 'acreage', 'number_tea', 'content']
+        fields = ['id', 'name', 'acreage', 'number_tea', 'content', 'image']
         read_only_fields = ['id']
 
     def to_representation(self, instance):
