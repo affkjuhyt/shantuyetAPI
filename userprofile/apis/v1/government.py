@@ -77,3 +77,17 @@ class GovernmentAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics
             serializer = TeasSerializer(teas, many=True)
 
             return Response(serializer.data)
+
+    @action(detail=False, methods=['post'], url_path='approve_add_tea', serializer_class=TeasSerializer)
+    def post_approve_teas(self, request, **kwargs):
+        tea = request.data['tea_id']
+        Teas.objects.filter(id=tea).update(status='approved')
+
+        return Response(status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['post'], url_path='reject_add_tea', serializer_class=TeasSerializer)
+    def post_approve_teas(self, request, **kwargs):
+        tea = request.data['tea_id']
+        Teas.objects.filter(id=tea).update(status='reject')
+
+        return Response(status=status.HTTP_200_OK)

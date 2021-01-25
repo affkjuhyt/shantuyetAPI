@@ -25,6 +25,6 @@ class TreeAreaPublicView(ReadOnlyModelViewSet):
     @action(detail=True, methods=['get'], url_path='list_teas', serializer_class=TeasSerializer)
     def get_list_tea(self, request, *args, **kwargs):
         tree_area = self.get_object()
-        tea = Teas.objects.filter(tree_area=tree_area)
+        tea = Teas.objects.filter(tree_area=tree_area, status='approved')
         serializer = TeasSerializer(tea, context={"request": request}, many=True)
         return Response(serializer.data)

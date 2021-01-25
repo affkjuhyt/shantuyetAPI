@@ -29,7 +29,7 @@ class TeasView(ReadOnlyModelViewSet):
     search_fields = ['name']
 
     def get_queryset(self):
-        return Teas.objects.filter()
+        return Teas.objects.filter(status='approved')
 
     @action(detail=True, methods=['get'], url_path='info_owner', serializer_class=OwnerSerializer)
     def get_info_owner(self, *args, **kwargs):
@@ -80,7 +80,7 @@ class TeasAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListC
             return Response(data=request.DATA)
 
     def get_queryset(self):
-        return Teas.objects.filter().all()
+        return Teas.objects.filter(status=='approved').all()
 
     @action(detail=True, methods=['post'], url_path='register_transfer', serializer_class=TransferSerializer,
             permission_classes=[SecondaryOwnerOnly])
