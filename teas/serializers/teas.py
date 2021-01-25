@@ -43,7 +43,7 @@ class TeasSerializer(serializers.ModelSerializer):
     def validate(self, data):
         lat = data['lat']
         lon = data['lon']
-        if ((0 < lat < 90) and (0 < lon < 90)):
+        if (0 < lat < 90) and (0 < lon < 90):
             return data
         else:
             raise serializers.ValidationError("Error")

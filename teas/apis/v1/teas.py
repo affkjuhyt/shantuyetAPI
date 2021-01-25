@@ -82,14 +82,6 @@ class TeasAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListC
     def get_queryset(self):
         return Teas.objects.filter().all()
 
-    @action(detail=True, methods=['get'], url_path='history_transfer', serializer_class=TransferSerializer)
-    def get_history_transfer(self, *args, **kwargs):
-        tea = self.get_object()
-        transfer = Transfer.objects.select_related('tea').filter(tea=tea)
-        transfer = TransferSerializer(transfer, many=True).data
-
-        return Response(transfer)
-
     @action(detail=True, methods=['post'], url_path='register_transfer', serializer_class=TransferSerializer,
             permission_classes=[SecondaryOwnerOnly])
     def post_register_transfer(self, request, *args, **kwargs):
