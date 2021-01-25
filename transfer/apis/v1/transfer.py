@@ -68,28 +68,16 @@ class TransferAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.L
 
         return Response(transfer)
 
-    @action(detail=False, methods=['post'], url_path='approve_request_government', serializer_class=TransferSerializer)
-    def get_transfer_government(self, request, *args, **kwargs):
+    @action(detail=False, methods=['post'], url_path='process_request_government', serializer_class=TransferSerializer)
+    def post_process_request_government(self, request, *args, **kwargs):
         try:
-            transfer_id = request.data['transfer']
-            transfer = Transfer.objects.filter(id=transfer_id).first()
-            transfer.status = 'approved'
-            transfer.save()
+            transfer_id = request.data['transfer_id']
+            request_type = request.data['request_type']
+            if request_type == 'approve':
+                Transfer.objects.filter(id=transfer_id).update(status='approved')
+            else:
+                Transfer.objects.filter(id=transfer_id).update(status='reject')
+            return Response('Successfully process request')
 
-            return Response('Approve transfer successfully!')
         except ValidationError:
-            return Response('Error when approved request')
-
-    @action(detail=False, methods=['post'], url_path='reject_requests_government', permission_classes=[GovernmentOnly])
-    def post_reject_request_government(self, request, *args, **kwargs):
-
-        try:
-            tea = request.data['tea']
-            secondary_owner = request.data['secondary_owner']
-            transfer = get_object_or_404(Transfer, tea=tea, secondary_owner=secondary_owner)
-            transfer.status = 'reject'
-            transfer.save()
-
-            return Response('Reject register transfer successfully!')
-        except ValidationError:
-            return Response('Error when reject to transfer!')
+            return Response('Error when process request')
