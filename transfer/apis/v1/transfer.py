@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from root.authentications import BaseUserJWTAuthentication
 from transfer.models import Transfer
 from transfer.serializers import TransferSerializer
-from userprofile.permissions import OwnerOnly, Government
+from userprofile.permissions import OwnerOnly, GovernmentOnly
 
 logger = logging.getLogger(__name__.split('.')[0])
 
@@ -86,3 +86,17 @@ class TransferAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.L
             return Response('Approve transfer successfully!')
         except ValidationError:
             return Response('Error when approved request')
+
+    @action(detail=False, methods=['post'], url_path='reject_requests_government', permission_classes=[GovernmentOnly])
+    def post_reject_request_government(self, request, *args, **kwargs):
+
+        try:
+            tea = request.data['tea']
+            secondary_owner = request.data['secondary_owner']
+            transfer = get_object_or_404(Transfer, tea=tea, secondary_owner=secondary_owner)
+            transfer.status = 'reject'
+            transfer.save()
+
+            return Response('Reject register transfer successfully!')
+        except ValidationError:
+            return Response('Error when reject to transfer!')
