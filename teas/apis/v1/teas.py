@@ -57,14 +57,6 @@ class TeasView(ReadOnlyModelViewSet):
 
         return Response({'data': info_user_data})
 
-    @action(detail=True, methods=['get'], url_path='transfer_history', serializer_class=TransferSerializer)
-    def get_transfer_history(self, *args, **kwargs):
-        tea = self.get_object()
-        transfer = Transfer.objects.select_related('tea').filter(tea=tea)
-        transfer = TransferSerializer(transfer, many=True).data
-
-        return Response(transfer)
-
 
 class TeasAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListCreateAPIView):
     serializer_class = TeasSerializer
@@ -80,7 +72,7 @@ class TeasAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListC
             return Response(data=request.DATA)
 
     def get_queryset(self):
-        return Teas.objects.filter(status=='approved').all()
+        return Teas.objects.filter(status='approved').all()
 
     @action(detail=True, methods=['post'], url_path='register_transfer', serializer_class=TransferSerializer,
             permission_classes=[SecondaryOwnerOnly])
@@ -105,3 +97,10 @@ class TeasAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListC
         transfer = TransferSerializer(transfer, many=True).data
 
         return Response(transfer)
+
+    @action(detail=False, methods=['get'], url_path='list_tea_request', serializer_class=TeasSerializer)
+    def get_list_tea_request(self, *args, **kwargs):
+        tea = Teas.objects.filter(status='processing')
+        tea = TeasSerializer(tea, many=True).data
+
+        return Response(tea)
