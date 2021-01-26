@@ -21,10 +21,11 @@ logger = logging.getLogger(__name__.split('.')[0])
 class SecondaryOwnerPublicView(ReadOnlyModelViewSet):
     serializer_class = SecondaryOwnerSerializer
     permission_classes = [AllowAny]
+    filter_fields = ['status']
     parser_classes = [JSONParser, MultiPartParser, FormParser]
 
     def get_queryset(self):
-        return SecondaryOwner.objects.filter(status='approved')
+        return SecondaryOwner.objects.filter()
 
 
 class SecondaryOwnerAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListCreateAPIView):
