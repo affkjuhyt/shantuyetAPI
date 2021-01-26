@@ -63,7 +63,7 @@ class TeasAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListC
     serializer_class = TeasSerializer
     authentication_classes = [BaseUserJWTAuthentication]
     permission_classes = [AllowAny]
-    filter_backends = []
+    filter_fields = ['status']
     parser_classes = [MultiPartParser, FormParser]
 
     def post(self,request):
@@ -73,7 +73,7 @@ class TeasAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListC
             return Response(data=request.DATA)
 
     def get_queryset(self):
-        return Teas.objects.filter(status='approved').all()
+        return Teas.objects.filter()
 
     @action(detail=True, methods=['post'], url_path='register_transfer', serializer_class=TransferSerializer,
             permission_classes=[SecondaryOwnerOnly])
@@ -98,13 +98,3 @@ class TeasAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListC
         transfer = TransferSerializer(transfer, many=True).data
 
         return Response(transfer)
-
-    @action(detail=False, methods=['get'], url_path='list_tea_request', serializer_class=TeasSerializer)
-    def get_list_tea_request(self, request, *args, **kwargs):
-        paginator = PageNumberPagination()
-        paginator.page_size = 10
-        tea = Teas.objects.filter(status='processing')
-        result_page = paginator.paginate_queryset(tea, request)
-        tea = TeasSerializer(result_page, context={"request": request}, many=True)
-
-        return paginator.get_paginated_response(tea.data)

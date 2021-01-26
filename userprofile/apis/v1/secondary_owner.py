@@ -31,6 +31,7 @@ class SecondaryOwnerAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, gene
     serializer_class = SecondaryOwnerSerializer
     authentication_classes = [BaseUserJWTAuthentication]
     permission_classes = [AllowAny]
+    filter_fields = ['status']
     parser_classes = [MultiPartParser, FormParser]
 
     def post(self,request):
@@ -41,17 +42,6 @@ class SecondaryOwnerAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, gene
 
     def get_queryset(self):
         return SecondaryOwner.objects.filter()
-
-    @action(detail=False, methods=['get'], url_path='list_secondary_owner_request',
-            serializer_class=SecondaryOwnerSerializer)
-    def get_list_secondary_owner_request(self, request, **kwargs):
-        paginator = PageNumberPagination()
-        paginator.page_size = 10
-        secondary_owner = SecondaryOwner.objects.filter(status='processing')
-        result_page = paginator.paginate_queryset(secondary_owner, request)
-        secondary_owner = SecondaryOwnerSerializer(result_page, context={"request": request}, many=True)
-
-        return paginator.get_paginated_response(secondary_owner.data)
 
     @action(detail=False, methods=['get'], url_path='secondary_owner_teas', serializer_class=TeasSerializer)
     def get_secondary_owner_teas(self, request, **kwargs):
