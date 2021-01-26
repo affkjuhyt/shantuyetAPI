@@ -46,7 +46,7 @@ class GovernmentAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics
         number_tree_area = TreeArea.objects.count()
         number_tea = Teas.objects.filter(status='approved').count()
         number_owner = Owner.objects.count()
-        number_secondary_owner = SecondaryOwner.objects.count()
+        number_secondary_owner = SecondaryOwner.objects.filter(status='approved').count()
         statistics_data.append({'number_tree_area': number_tree_area,
                                 'number_tea': number_tea,
                                 'number_owner': number_owner,
