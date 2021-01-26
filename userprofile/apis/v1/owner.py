@@ -10,8 +10,6 @@ from rest_framework.viewsets import ReadOnlyModelViewSet, ViewSetMixin
 from root.authentications import BaseUserJWTAuthentication
 from teas.models import Teas
 from teas.serializers import TeasSerializer
-from transfer.models import Transfer
-from transfer.serializers import TransferSerializer
 from userprofile.models import Owner
 from userprofile.serializers import OwnerSerializer
 
@@ -47,12 +45,4 @@ class OwnerAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.List
         owner = Owner.objects.filter(user_id=request.user.id).first()
         teas = Teas.objects.filter(owner=owner)
         serializer = TeasSerializer(teas, context={"request": request}, many=True)
-        return Response(serializer.data)
-
-    @action(detail=False, methods=['get'], url_path='manager_transfer', serializer_class=TransferSerializer)
-    def get_transfer(self, request, *args, **kwargs):
-        owner = Owner.objects.filter(user_id=request.user.id).first()
-        transfer = Transfer.objects.filter(owner=owner)
-
-        serializer = TransferSerializer(transfer, many=True)
         return Response(serializer.data)

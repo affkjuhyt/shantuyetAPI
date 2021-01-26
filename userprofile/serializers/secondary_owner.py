@@ -2,7 +2,6 @@ import logging
 
 from rest_framework import serializers
 
-from transfer.models import Transfer
 from userprofile.models import SecondaryOwner
 
 logger = logging.getLogger(__name__.split('.')[0])

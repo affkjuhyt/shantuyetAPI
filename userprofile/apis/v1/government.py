@@ -16,7 +16,8 @@ from rest_framework.viewsets import ReadOnlyModelViewSet, ViewSetMixin
 
 from root.authentications import BaseUserJWTAuthentication
 from userprofile.models import Government
-from userprofile.serializers import GovernmentSerializer
+from userprofile.serializers import GovernmentSerializer, SecondaryOwnerSerializer
+from userprofile.permissions import GovernmentOnly
 
 logger = logging.getLogger(__name__.split('.')[0])
 
@@ -33,7 +34,7 @@ class GovernmentPublicView(ReadOnlyModelViewSet):
 class GovernmentAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListCreateAPIView):
     serializer_class = GovernmentSerializer
     authentication_classes = [BaseUserJWTAuthentication]
-    permission_classes = [AllowAny]
+    permission_classes = [GovernmentOnly]
     parser_classes = [MultiPartParser, FormParser, JSONParser]
 
     def get_queryset(self):
@@ -86,4 +87,15 @@ class GovernmentAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics
             Teas.objects.filter(id=tea).update(status='approved')
         else:
             Teas.objects.filter(id=tea).update(status='reject')
+        return Response(status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['post'], url_path='process_request_add_user',
+            serializer_class=SecondaryOwnerSerializer)
+    def post_process_request_add_user(self, request, *args, **kwargs):
+        secondary_owner = request.data['secondary_owner_id']
+        request_type = request.data['request_type']
+        if request_type == 'approve':
+            SecondaryOwner.objects.filter(id=secondary_owner).update(status='approved')
+        else:
+            SecondaryOwner.objects.filter(id=secondary_owner).update(status='reject')
         return Response(status=status.HTTP_200_OK)

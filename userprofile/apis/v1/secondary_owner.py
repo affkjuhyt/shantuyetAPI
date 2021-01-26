@@ -1,6 +1,6 @@
 import logging
 
-from rest_framework import generics, status
+from rest_framework import generics
 from rest_framework.decorators import action
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import AllowAny
@@ -11,7 +11,6 @@ from root.authentications import BaseUserJWTAuthentication
 from teas.models import Teas
 from teas.serializers import TeasSerializer
 from transfer.models import Transfer
-from transfer.serializers import TransferSerializer
 from userprofile.models import SecondaryOwner
 from userprofile.serializers import SecondaryOwnerSerializer
 
@@ -42,6 +41,14 @@ class SecondaryOwnerAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, gene
     def get_queryset(self):
         return SecondaryOwner.objects.filter()
 
+    @action(detail=False, methods=['get'], url_path='list_secondary_owner_request',
+            serializer_class=SecondaryOwnerSerializer)
+    def get_list_secondary_owner_request(self, request, **kwargs):
+        secondary_owner = SecondaryOwner.objects.filter(status='processing')
+        secondary_owner = SecondaryOwnerSerializer(secondary_owner, many=True).data
+
+        return Response(secondary_owner)
+
     @action(detail=False, methods=['get'], url_path='secondary_owner_teas', serializer_class=TeasSerializer)
     def get_secondary_owner_teas(self, request, **kwargs):
         secondary_owner = SecondaryOwner.objects.filter(user_id=request.user.id).first()
@@ -49,12 +56,4 @@ class SecondaryOwnerAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, gene
         teas = Teas.objects.filter(id__in=tea_ids)
         serializer = TeasSerializer(teas, context={"request": request}, many=True)
 
-        return Response(serializer.data)
-
-    @action(detail=False, methods=['get'], url_path='manager_transfer', serializer_class=TransferSerializer)
-    def get_transfer(self, request, *args, **kwargs):
-        secondary_owner = SecondaryOwner.objects.filter(user_id=request.user.id).first()
-        transfer = Transfer.objects.filter(secondary_owner=secondary_owner)
-
-        serializer = TransferSerializer(transfer, many=True)
         return Response(serializer.data)
