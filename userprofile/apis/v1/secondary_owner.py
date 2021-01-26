@@ -24,7 +24,7 @@ class SecondaryOwnerPublicView(ReadOnlyModelViewSet):
     parser_classes = [JSONParser, MultiPartParser, FormParser]
 
     def get_queryset(self):
-        return SecondaryOwner.objects.filter()
+        return SecondaryOwner.objects.filter(status='approved')
 
 
 class SecondaryOwnerAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListCreateAPIView):
