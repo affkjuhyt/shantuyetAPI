@@ -2,6 +2,7 @@ import logging
 
 from rest_framework import generics, status
 from rest_framework.decorators import action
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -99,8 +100,11 @@ class TeasAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListC
         return Response(transfer)
 
     @action(detail=False, methods=['get'], url_path='list_tea_request', serializer_class=TeasSerializer)
-    def get_list_tea_request(self, *args, **kwargs):
+    def get_list_tea_request(self, request, *args, **kwargs):
+        paginator = PageNumberPagination()
+        paginator.page_size = 10
         tea = Teas.objects.filter(status='processing')
-        tea = TeasSerializer(tea, many=True).data
+        result_page = paginator.paginate_queryset(tea, request)
+        tea = TeasSerializer(result_page, context={"request": request}, many=True)
 
-        return Response(tea)
+        return paginator.get_paginated_response(tea.data)

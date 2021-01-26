@@ -2,6 +2,7 @@ import logging
 
 from rest_framework import generics
 from rest_framework.decorators import action
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -44,16 +45,22 @@ class SecondaryOwnerAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, gene
     @action(detail=False, methods=['get'], url_path='list_secondary_owner_request',
             serializer_class=SecondaryOwnerSerializer)
     def get_list_secondary_owner_request(self, request, **kwargs):
+        paginator = PageNumberPagination()
+        paginator.page_size = 10
         secondary_owner = SecondaryOwner.objects.filter(status='processing')
-        secondary_owner = SecondaryOwnerSerializer(secondary_owner, many=True).data
+        result_page = paginator.paginate_queryset(secondary_owner, request)
+        secondary_owner = SecondaryOwnerSerializer(result_page, context={"request": request}, many=True)
 
-        return Response(secondary_owner)
+        return paginator.get_paginated_response(secondary_owner.data)
 
     @action(detail=False, methods=['get'], url_path='secondary_owner_teas', serializer_class=TeasSerializer)
     def get_secondary_owner_teas(self, request, **kwargs):
+        paginator = PageNumberPagination()
+        paginator.page_size = 10
         secondary_owner = SecondaryOwner.objects.filter(user_id=request.user.id).first()
         tea_ids = Transfer.objects.filter(secondary_owner=secondary_owner.id).values_list('tea_id', flat=True)
         teas = Teas.objects.filter(id__in=tea_ids)
-        serializer = TeasSerializer(teas, context={"request": request}, many=True)
+        result_page = paginator.paginate_queryset(teas, request)
+        serializer = TeasSerializer(result_page, context={"request": request}, many=True)
 
-        return Response(serializer.data)
+        return paginator.get_paginated_response(serializer.data)
