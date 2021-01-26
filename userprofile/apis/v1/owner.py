@@ -46,7 +46,7 @@ class OwnerAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.List
     def get_owner_tea(self, request, *args, **kwargs):
         owner = Owner.objects.filter(user_id=request.user.id).first()
         teas = Teas.objects.filter(owner=owner)
-        serializer = TeasSerializer(teas, many=True)
+        serializer = TeasSerializer(teas, context={"request": request}, many=True)
         return Response(serializer.data)
 
     @action(detail=False, methods=['get'], url_path='manager_transfer', serializer_class=TransferSerializer)
