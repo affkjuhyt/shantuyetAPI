@@ -1,6 +1,7 @@
 import logging
 
 from rest_framework import generics, status
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import action
@@ -61,10 +62,13 @@ class GovernmentAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics
         if not owner:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         else:
+            paginator = PageNumberPagination()
+            paginator.page_size = 10
             teas = Teas.objects.filter(owner=owner)
-            serializer = TeasSerializer(teas, context={"request": request}, many=True)
+            result_page = paginator.paginate_queryset(teas, request)
+            serializer = TeasSerializer(result_page, context={"request": request}, many=True)
 
-            return Response(serializer.data)
+            return paginator.get_paginated_response(serializer.data)
 
     @action(detail=False, methods=['post'], url_path='secondary_owner_list_teas', serializer_class=TeasSerializer)
     def get_secondary_owner_list_teas(self, request, **kwargs):
@@ -73,11 +77,14 @@ class GovernmentAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics
         if not secondary_owner:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         else:
+            paginator = PageNumberPagination()
+            paginator.page_size = 10
             tea_ids = Transfer.objects.filter(secondary_owner=secondary_owner.id).values_list('tea_id', flat=True)
             teas = Teas.objects.filter(id__in=tea_ids)
-            serializer = TeasSerializer(teas, context={"request": request}, many=True)
+            result_page = paginator.paginate_queryset(teas, request)
+            serializer = TeasSerializer(result_page, context={"request": request}, many=True)
 
-            return Response(serializer.data)
+            return paginator.get_paginated_response(serializer.data)
 
     @action(detail=False, methods=['post'], url_path='process_request_add_tea', serializer_class=TeasSerializer)
     def post_process_request_add_teas(self, request, **kwargs):
