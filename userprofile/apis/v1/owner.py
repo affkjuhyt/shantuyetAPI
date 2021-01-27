@@ -2,6 +2,7 @@ import logging
 
 from rest_framework import generics, status
 from rest_framework.decorators import action
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -42,7 +43,10 @@ class OwnerAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.List
 
     @action(detail=False, methods=['get'], url_path='owner_teas', serializer_class=TeasSerializer)
     def get_owner_tea(self, request, *args, **kwargs):
+        paginator = PageNumberPagination()
+        paginator.page_size = 10
         owner = Owner.objects.filter(user_id=request.user.id).first()
         teas = Teas.objects.filter(owner=owner)
-        serializer = TeasSerializer(teas, context={"request": request}, many=True)
+        result_page = paginator.paginate_queryset(teas, request)
+        serializer = TeasSerializer(result_page, context={"request": request}, many=True)
         return Response(serializer.data)
