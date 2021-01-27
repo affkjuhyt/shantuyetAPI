@@ -30,6 +30,7 @@ class TransferAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.L
     serializer_class = TransferSerializer
     authentication_classes = [BaseUserJWTAuthentication]
     permission_classes = [AllowAny]
+    filter_fields = ['status']
     filter_backends = []
     parser_classes = [JSONParser, MultiPartParser, FormParser]
 
@@ -60,13 +61,6 @@ class TransferAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.L
             return Response('Reject register transfer successfully!')
         except ValidationError:
             return Response('Error when reject to transfer!')
-
-    @action(detail=False, methods=['get'], url_path='get_transfer_wait_government', serializer_class=TransferSerializer)
-    def get_transfer_government(self, *args, **kwargs):
-        transfers = Transfer.objects.filter(status='government_agree')
-        transfer = TransferSerializer(transfers, many=True).data
-
-        return Response(transfer)
 
     @action(detail=False, methods=['post'], url_path='process_request_government', serializer_class=TransferSerializer)
     def post_process_request_government(self, request, *args, **kwargs):
