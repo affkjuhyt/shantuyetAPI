@@ -85,9 +85,10 @@ class GovernmentAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics
         request_type = request.data['request_type']
         if request_type == 'approve':
             Teas.objects.filter(id=tea).update(status='approved')
+            return Response('Approved request successfully',status=status.HTTP_200_OK)
         else:
             Teas.objects.filter(id=tea).update(status='reject')
-        return Response(status=status.HTTP_200_OK)
+            return Response('Reject request successfully', status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['post'], url_path='process_request_add_user',
             serializer_class=SecondaryOwnerSerializer)
@@ -96,6 +97,7 @@ class GovernmentAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics
         request_type = request.data['request_type']
         if request_type == 'approve':
             SecondaryOwner.objects.filter(id=secondary_owner).update(status='approved')
+            return Response('Approved request successfully' ,status=status.HTTP_200_OK)
         else:
             SecondaryOwner.objects.filter(id=secondary_owner).update(status='reject')
-        return Response(status=status.HTTP_200_OK)
+            return Response('Reject request successfully', status=status.HTTP_200_OK)
