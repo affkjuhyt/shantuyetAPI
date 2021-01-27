@@ -1,6 +1,6 @@
 import logging
 
-from rest_framework import generics, status
+from rest_framework import generics
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
@@ -49,4 +49,4 @@ class OwnerAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.List
         teas = Teas.objects.filter(owner=owner)
         result_page = paginator.paginate_queryset(teas, request)
         serializer = TeasSerializer(result_page, context={"request": request}, many=True)
-        return Response(serializer.data)
+        return paginator.get_paginated_response(serializer.data)
