@@ -17,6 +17,6 @@ class TreeAreaSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
-        response['number_tea'] = Teas.objects.filter(tree_area=instance.id).count()
+        response['number_tea'] = Teas.objects.filter(tree_area=instance.id, status='approved').count()
 
         return response

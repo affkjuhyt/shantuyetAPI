@@ -1,5 +1,6 @@
 import logging
 
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
@@ -25,6 +26,10 @@ class TreeAreaPublicView(ReadOnlyModelViewSet):
     @action(detail=True, methods=['get'], url_path='list_teas', serializer_class=TeasSerializer)
     def get_list_tea(self, request, *args, **kwargs):
         tree_area = self.get_object()
+        paginator = PageNumberPagination()
+        paginator.page_size = 10
         tea = Teas.objects.filter(tree_area=tree_area, status='approved')
-        serializer = TeasSerializer(tea, context={"request": request}, many=True)
-        return Response(serializer.data)
+        result_page = paginator.paginate_queryset(tea, request)
+        serializer = TeasSerializer(result_page, context={"request": request}, many=True)
+
+        return paginator.get_paginated_response(serializer.data)
