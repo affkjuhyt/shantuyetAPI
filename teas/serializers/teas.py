@@ -4,6 +4,7 @@ from rest_framework import serializers
 
 from teas.models import Teas
 from transfer.models import Transfer
+from treearea.models import TreeArea
 
 logger = logging.getLogger(__name__)
 
@@ -11,11 +12,13 @@ logger = logging.getLogger(__name__)
 class TeasSerializer(serializers.ModelSerializer):
     class Meta:
         model = Teas
-        fields = ['id', 'owner', 'name', 'age', 'diameter', 'lat', 'lon', 'height', 'tree_area',
+        fields = ['id', 'owner', 'name', 'age', 'diameter', 'lat', 'lon', 'height',
                   'image1', 'image2', 'image3', 'image4']
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
+        name = TreeArea.objects.filter(teas=instance).first().name
+        response['tree_area'] = name
         if instance.owner is not None:
             response['owner_name'] = instance.owner.fullname
             response['owner_phone'] = instance.owner.phone_number
