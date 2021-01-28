@@ -17,8 +17,11 @@ class TeasSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
-        name = TreeArea.objects.filter(teas=instance).first().name
-        response['tree_area'] = name
+        tree_area = TreeArea.objects.filter(teas=instance).first()
+        if tree_area:
+            response['tree_area'] = tree_area.name
+        else:
+            response['tree_area'] = None
         if instance.owner is not None:
             response['owner_name'] = instance.owner.fullname
             response['owner_phone'] = instance.owner.phone_number
