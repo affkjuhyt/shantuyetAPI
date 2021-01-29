@@ -30,7 +30,7 @@ class SecondaryOwnerPublicView(ReadOnlyModelViewSet):
 
 class SecondaryOwnerAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListCreateAPIView):
     serializer_class = SecondaryOwnerSerializer
-    authentication_classes = [BaseUserJWTAuthentication]
+    # authentication_classes = [BaseUserJWTAuthentication]
     permission_classes = [AllowAny]
     filter_fields = ['status']
     parser_classes = [MultiPartParser, FormParser]

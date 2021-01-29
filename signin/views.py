@@ -30,10 +30,10 @@ class GoogleView(APIView):
             return Response(content)
 
         try:
-            user = User.objects.get(first_name=data['email'])
+            user = User.objects.get(last_name=data['email'])
         except User.DoesNotExist:
             user = User()
-            user.first_name = data['email']
+            user.last_name = data['email']
             user.password = make_password(BaseUserManager().make_random_password())
             user.save()
             secondary_owner = SecondaryOwner(user=user)
@@ -62,10 +62,10 @@ class FacebookView(APIView):
         user_info_response = json.loads(user_info_request.text)
 
         try:
-            user = User.objects.get(first_name=user_info_response["id"])
+            user = User.objects.get(last_name=user_info_response["id"])
         except User.DoesNotExist:
             user = User()
-            user.first_name = user_info_response["id"]
+            user.last_name = user_info_response["id"]
             user.password = make_password(BaseUserManager().make_random_password())
             user.save()
             secondary_owner = SecondaryOwner(user=user)
@@ -90,10 +90,10 @@ class AppleView(APIView):
         user_name = request.data.get("user_id")
 
         try:
-            user = User.objects.get(first_name=user_name)
+            user = User.objects.get(last_name=user_name)
         except User.DoesNotExist:
             user = User()
-            user.first_name = user_name
+            user.last_name = user_name
             user.password = make_password(BaseUserManager().make_random_password())
             user.save()
             secondary_owner = SecondaryOwner(user=user)
