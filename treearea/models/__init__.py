@@ -1,1 +1,1 @@
-from .tree_area import TreeArea
+from .tree_area import TreeArea, Coordinate
