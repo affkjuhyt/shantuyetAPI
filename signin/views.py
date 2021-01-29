@@ -34,6 +34,7 @@ class GoogleView(APIView):
         except User.DoesNotExist:
             user = User()
             user.last_name = data['email']
+            user.username = data['email']
             user.password = make_password(BaseUserManager().make_random_password())
             user.save()
             secondary_owner = SecondaryOwner(user=user)
@@ -66,6 +67,7 @@ class FacebookView(APIView):
         except User.DoesNotExist:
             user = User()
             user.last_name = user_info_response["id"]
+            user.username = user_info_response["id"]
             user.password = make_password(BaseUserManager().make_random_password())
             user.save()
             secondary_owner = SecondaryOwner(user=user)
@@ -94,6 +96,7 @@ class AppleView(APIView):
         except User.DoesNotExist:
             user = User()
             user.last_name = user_name
+            user.username = user_name
             user.password = make_password(BaseUserManager().make_random_password())
             user.save()
             secondary_owner = SecondaryOwner(user=user)
