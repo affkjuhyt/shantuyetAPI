@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
+from django.db.models import Q
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.utils import json
@@ -30,7 +31,7 @@ class GoogleView(APIView):
             return Response(content)
 
         try:
-            user = User.objects.get(username=data['email'], last_name=data['email'])
+            user = User.objects.filter(Q(username=data['email']) | Q(last_name=data['email']))
         except User.DoesNotExist:
             user = User()
             user.last_name = data['email']
