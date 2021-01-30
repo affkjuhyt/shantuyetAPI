@@ -30,7 +30,7 @@ class GoogleView(APIView):
             return Response(content)
 
         try:
-            user = User.objects.get(username=data['email'], last_name=data['email'])
+            user = User.objects.get(last_name=data['email'])
         except User.DoesNotExist:
             user = User()
             user.last_name = data['email']
@@ -63,7 +63,7 @@ class FacebookView(APIView):
         user_info_response = json.loads(user_info_request.text)
 
         try:
-            user = User.objects.get(username=user_info_response['id'], last_name=user_info_response["id"])
+            user = User.objects.get(last_name=user_info_response["id"])
         except User.DoesNotExist:
             user = User()
             user.last_name = user_info_response["id"]
@@ -92,7 +92,7 @@ class AppleView(APIView):
         user_name = request.data.get("user_id")
 
         try:
-            user = User.objects.get(username=user_name, last_name=user_name)
+            user = User.objects.get(last_name=user_name)
         except User.DoesNotExist:
             user = User()
             user.last_name = user_name
