@@ -30,9 +30,8 @@ class GoogleView(APIView):
             content = {'message': 'wrong google token / this google token is already expired.'}
             return Response(content)
 
-        try:
-            user = User.objects.filter(Q(username=data['email']) | Q(last_name=data['email']))
-        except User.DoesNotExist:
+        user = User.objects.filter(Q(username=data['email']) | Q(last_name=data['email'])).first()
+        if not user:
             user = User()
             user.last_name = data['email']
             user.username = data['email']
@@ -63,9 +62,8 @@ class FacebookView(APIView):
         user_info_request = requests.get(user_info_url, params=user_info_payload)
         user_info_response = json.loads(user_info_request.text)
 
-        try:
-            user = User.objects.get(username=user_info_response['id'], last_name=user_info_response["id"])
-        except User.DoesNotExist:
+        user = User.objects.filter(Q(username=user_info_response['id']) | Q(last_name=user_info_response["id"])).first()
+        if not user:
             user = User()
             user.last_name = user_info_response["id"]
             user.username = user_info_response["id"]
@@ -92,9 +90,8 @@ class AppleView(APIView):
 
         user_name = request.data.get("user_id")
 
-        try:
-            user = User.objects.get(username=user_name, last_name=user_name)
-        except User.DoesNotExist:
+        user = User.objects.filter(Q(username=user_name) | Q(last_name=user_name)).first()
+        if not user:
             user = User()
             user.last_name = user_name
             user.username = user_name
@@ -115,7 +112,6 @@ class AppleView(APIView):
 
 
 class LoginAPI(APIView):
-
     def post(self, request):
         if not request.data:
             return Response({'Error': "Please provide username/password"}, status=status.HTTP_400_BAD_REQUEST)
