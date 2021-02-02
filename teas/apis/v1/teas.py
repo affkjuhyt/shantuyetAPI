@@ -92,9 +92,12 @@ class TeasAdminView(ViewSetMixin, generics.RetrieveUpdateAPIView, generics.ListC
             return Response('Register transfer is successfully.', status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['get'], url_path='list_request', serializer_class=TransferSerializer)
-    def get_list_request(self, *args, **kwargs):
+    def get_list_request(self, request, *args, **kwargs):
+        paginator = PageNumberPagination()
+        paginator.page_size = 10
         tea = self.get_object()
         transfer = Transfer.objects.select_related('tea').filter(tea=tea, status='wait_owner_agree')
-        transfer = TransferSerializer(transfer, many=True).data
+        result_page = paginator.paginate_queryset(transfer, request)
+        transfer = TransferSerializer(result_page, context={"request": request}, many=True)
 
-        return Response(transfer)
+        return paginator.get_paginated_response(transfer.data)
